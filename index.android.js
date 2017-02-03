@@ -5,26 +5,90 @@
  */
 
 import React, { Component } from 'react';
+import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
 } from 'react-native';
 
+
 export default class wikius extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      user : null,
+    };
+  }
+
+  _currentUserAsync() {
+    GoogleSignin.currentUserAsync().then((user) => {
+      this.setState({ user });
+    }).done();
+  }
+
+  _configure() {
+    GoogleSignin.configure({
+    })
+    .then(() => {
+      this._currentUserAsync();
+    });
+  }
+
+  _signIn() {
+    GoogleSignin.hasPlayServices({ autoResolve: true })
+    .then(() => {
+      if (this.state.user === null) {
+        GoogleSignin.signIn()
+        .then((user) => {
+          this._currentUserAsync();
+          console.log(user);
+        })
+        .catch((err) => {
+          console.log('WRONG SIGNIN');
+        })
+        .done();
+      }
+    })
+    .catch((err) => {
+      console.log("Play services error", err.code, err.message);
+    });
+  }
+
+  _signOut() {
+    if (this.state.user !== null) {
+      GoogleSignin.signOut()
+      .then(() => {
+        this.setState({ user: null });
+      })
+      .catch((err) => {
+        console.log('err');
+      });
+    }
+  }
+
+  componentDidMount() {
+    this._configure();
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
+      <View>
+        <GoogleSigninButton
+          style={{width: 312, height: 48}}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={this._signIn.bind(this)}/>
+        <Button
+          onPress={this._signOut.bind(this)}
+          title="SIGN OUT"
+          color="#841584"/>
+        <Text>
+          {JSON.stringify(this.state.user)}
         </Text>
       </View>
     );
