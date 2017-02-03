@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "595568354211",
+    "project_id": "wikius-d9e00"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595568354211:android:f917002e5c0ec1a4",
+        "android_client_info": {
+          "package_name": "com.wikius"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595568354211-i0iorknnshdv2l9bteed84j1llc4u5rv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADUvyEYhi6bPdLWHPAaKoUskb2YZPVLtk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
