@@ -45,7 +45,6 @@ export function inputNickname(nickname) {
 
       fetch(`${host}/users/matchuser_nickname/${nickname}`)
       .then((res) => {
-        console.log(res);
         const check = JSON.parse(res._bodyText);
         const checkNick =
           check
