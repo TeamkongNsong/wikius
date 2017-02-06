@@ -32,7 +32,7 @@ class Main extends Component {
         <MapView
           style={styles.map}
           region={this.props.region}
-          showsUserLocation={true}
+          showsUserLocation
         >
           <Text />
         </MapView>

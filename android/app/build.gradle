@@ -13,7 +13,7 @@ import com.android.build.OutputFile
  *
  * project.ext.react = [
  *   // the name of the generated asset file containing your JS bundle
- *   bundleAssetName: "index.android.bundle",
+ *   bundleAssetName: "inkeytool -genkey -v -keystore my-release-key.keystore -alias my_key -keyalg RSA -keysize 2048 -validity 10000dex.android.bundle",
  *
  *   // the entry file for bundle generation
  *   entryFile: "index.android.js",
@@ -126,7 +126,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-google-signin')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"
