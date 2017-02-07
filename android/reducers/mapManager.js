@@ -6,21 +6,36 @@ const initialState = {
     longitude: -122.4324,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
-    initialPosition: 'unknown',
-    lastPosition: 'unknown',
   },
-  checkGPS: false,
+  userRegion: {
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  },
+  flags: [],
 };
 
 const mapManager = (state = initialState, action) => {
   switch (action.type) {
     case types.REFRESH_GPS:
       return Object.assign({}, state, {
-        checkGPS: action.check,
-        region: Object.assign({}, state.region, {
-          latitude: action.coords.latitude,
-          longitude: action.coords.longitude,
-        }),
+        region: action.region,
+      });
+
+    case types.REFRESH_FLAGS:
+      return Object.assign({}, state, {
+        flags: action.flags,
+      });
+
+    case types.SET_USER_REGION:
+      return Object.assign({}, state, {
+        userRegion: action.userRegion,
+      });
+
+    case types.INIT_USER_REGION:
+      return Object.assign({}, state, {
+        region: state.userRegion,
       });
 
     default:

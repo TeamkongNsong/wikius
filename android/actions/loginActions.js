@@ -24,32 +24,34 @@ export function logIn() {
       user,
     } = getState().logInManager;
 
-    if (user !== null) return;
+    if (user !== null) return console.log('already logged in!');
 
     return GoogleSignin.hasPlayServices({ autoResolve: true })
-    .then(() => GoogleSignin.signIn()
-      .then((user) => {
-        console.log(`logged in : ${user.name}`);
-        dispatch(refreshUser(user));
-        return user;
+      .then(() => {
+        GoogleSignin.signIn()
+          .then((signedUser) => {
+            console.log(`logged in : ${signedUser.name}`);
+            dispatch(refreshUser(signedUser));
+            return signedUser;
+          })
+          .catch((err) => {
+            console.log('WRONG SIGNIN', err);
+          })
+          .then((matchNeedUser) => {
+            fetch(`${host}/users/matchuser_id/${matchNeedUser.id}`)
+            .then((res) => {
+              const check = JSON.parse(res._bodyText);
+              if (check) {
+                Actions.main();
+              } else {
+                Actions.makeNickname();
+              }
+            });
+          });
       })
       .catch((err) => {
-        console.log('WRONG SIGNIN', err);
-      }))
-    .catch((err) => {
-      console.log('Play services error', err.code, err.message);
-    })
-    .then(user =>
-      fetch(`${host}/users/matchuser_id/${user.id}`)
-      .then((res) => {
-        const check = JSON.parse(res._bodyText);
-        if (check) {
-          Actions.main();
-        } else {
-          Actions.makeNickname();
-        }
-      })
-    );
+        console.log('Play services error', err.code, err.message);
+      });
   };
 }
 

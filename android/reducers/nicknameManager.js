@@ -18,6 +18,11 @@ const nicknameManager = (state = initialState, action) => {
       });
     }
 
+    case types.REFRESH_NICKNAME:
+      return Object.assign({}, state, {
+        nickname: action.nickname,
+      });
+
     default:
       return state;
   }

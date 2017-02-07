@@ -21,6 +21,11 @@ const nicknameConfirm = () => ({
   type: types.NICKNAME_CONFIRM,
 });
 
+export const refreshNickname = nickname => ({
+  type: types.REFRESH_NICKNAME,
+  nickname,
+});
+
 let delay = setTimeout(() => {}, 0);
 
 export function inputNickname(nickname) {

@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   Button,
-  Text,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import * as mapActions from '../actions/mapActions';
@@ -21,43 +20,16 @@ const styles = {
 };
 
 class Main extends Component {
-  constructor() {
-    super();
-    this.state = {
-      marker: (
-        <MapView.Marker
-          coordinate={{
-            latitude: 0,
-            longitude: 0,
-          }}
-          title='타이틀'
-          description='좋군'
-        />
-      ),
-    }
-  }
-
   componentDidMount() {
-    this.props.checkGPS();
+    this.props.fetchFlags();
+    this.props.initializeUserRegion();
   }
 
-  onMapPress(e) {
-    console.log(e.nativeEvent.coordinate);
-  }
+  scribblePress() {
+    console.log('2',JSON.stringify(this.props.userRegion));
 
-  markerCreater() {
-    this.setState({
-      marker: (
-        <MapView.Marker
-          coordinate={{
-            latitude: this.props.region.latitude,
-            longitude: this.props.region.longitude,
-          }}
-          title='타이틀'
-          description='좋군'
-        />
-      ),
-    });
+    this.props.scribble('추후변경');
+
   }
 
   render() {
@@ -66,21 +38,26 @@ class Main extends Component {
         <MapView
           style={styles.map}
           region={this.props.region}
+          onRegionChange={this.props.refreshGPS}
           showsUserLocation
-          onPress={e => this.onMapPress(e)}
         >
-        <MapView.Marker
-          coordinate={{
-            latitude: this.props.region.latitude,
-            longitude: this.props.region.longitude,
-          }}
-          title='타이틀'
-          description='좋군'
-          image={require('../app/src/image/marker_blue.png')}
-        />
+          {
+            this.props.flags.map((flag, index) => (
+                <MapView.Marker
+                  key={index}
+                  title={flag.nickname}
+                  description={flag.message}
+                  coordinate={{
+                    latitude: flag.latitude,
+                    longitude: flag.longitude,
+                  }}
+                />
+              )
+            )
+          }
         </MapView>
         <View style={{ top: 300, left: 10, width: 100 }}>
-          <Button title="Flag 박기" onPress={this.markerCreater.bind(this)} />
+          <Button title="낙서하기" onPress={this.scribblePress.bind(this)} />
         </View>
       </View>
     );
@@ -89,10 +66,17 @@ class Main extends Component {
 
 const mapStateToProps = state => ({
   region: state.mapManager.region,
+  flags: state.mapManager.flags,
+  userRegion: state.mapManager.userRegion,
 });
 
 const mapDispatchToProps = dispatch => ({
   checkGPS: () => dispatch(mapActions.checkGPS()),
+  scribble: message => dispatch(mapActions.scribble(message)),
+  refreshGPS: region => dispatch(mapActions.refreshGPS(region)),
+  getUserRegion: () => dispatch(mapActions.getUserRegion()),
+  fetchFlags: () => dispatch(mapActions.fetchFlags()),
+  initializeUserRegion: () => dispatch(mapActions.initializeUserRegion()),
 });
 
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);
