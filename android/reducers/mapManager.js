@@ -14,20 +14,14 @@ const initialState = {
 
 const mapManager = (state = initialState, action) => {
   switch (action.type) {
-    case types.REFRESH_GPS: {
-      if (!action.check) {
-        return Object.assign({}, state, {
-          checkGPS: action.check,
-        });
-      }
+    case types.REFRESH_GPS:
       return Object.assign({}, state, {
         checkGPS: action.check,
         region: Object.assign({}, state.region, {
-          latitude: action.latitude,
-          longitude: action.longitude,
+          latitude: action.coords.latitude,
+          longitude: action.coords.longitude,
         }),
       });
-    }
 
     default:
       return state;

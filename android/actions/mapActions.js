@@ -11,21 +11,24 @@ const refreshGPS = (check, coords) => ({
 });
 
 export function checkGPS() {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(requestGPS());
+    const {
+      region,
+    } = getState().mapManager;
 
     return navigator.geolocation.getCurrentPosition((position) => {
       const coords = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       };
-      console.log('is here', coords);
-
       dispatch(refreshGPS(true, coords));
     }, (err) => {
-      console.log('handle err', err);
-
-      dispatch(refreshGPS(false));
+      const coords = {
+        latitude: region.latitude,
+        longitude: region.longitude,
+      };
+      dispatch(refreshGPS(false, coords));
     }, {
       enableHighAccuracy: true,
       timeout: 3000,

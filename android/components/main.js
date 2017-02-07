@@ -9,7 +9,6 @@ import {
 import MapView from 'react-native-maps';
 import * as mapActions from '../actions/mapActions';
 
-const Dimensions = require('Dimensions');
 const styles = {
   container: {
     flex: 1,
@@ -22,8 +21,43 @@ const styles = {
 };
 
 class Main extends Component {
+  constructor() {
+    super();
+    this.state = {
+      marker: (
+        <MapView.Marker
+          coordinate={{
+            latitude: 0,
+            longitude: 0,
+          }}
+          title='타이틀'
+          description='좋군'
+        />
+      ),
+    }
+  }
+
   componentDidMount() {
     this.props.checkGPS();
+  }
+
+  onMapPress(e) {
+    console.log(e.nativeEvent.coordinate);
+  }
+
+  markerCreater() {
+    this.setState({
+      marker: (
+        <MapView.Marker
+          coordinate={{
+            latitude: this.props.region.latitude,
+            longitude: this.props.region.longitude,
+          }}
+          title='타이틀'
+          description='좋군'
+        />
+      ),
+    });
   }
 
   render() {
@@ -33,11 +67,20 @@ class Main extends Component {
           style={styles.map}
           region={this.props.region}
           showsUserLocation
+          onPress={e => this.onMapPress(e)}
         >
-          <Text />
+        <MapView.Marker
+          coordinate={{
+            latitude: this.props.region.latitude,
+            longitude: this.props.region.longitude,
+          }}
+          title='타이틀'
+          description='좋군'
+          image={require('../app/src/image/marker_blue.png')}
+        />
         </MapView>
-        <View style={{ top: 10, left: 10, width: 100 }}>
-          <Button title="Flag 박기" onPress={() => { console.log('flag'); }} />
+        <View style={{ top: 300, left: 10, width: 100 }}>
+          <Button title="Flag 박기" onPress={this.markerCreater.bind(this)} />
         </View>
       </View>
     );
@@ -45,7 +88,7 @@ class Main extends Component {
 }
 
 const mapStateToProps = state => ({
-  region: state.region,
+  region: state.mapManager.region,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -6,11 +6,10 @@ import {
   TextInput,
   Text,
   BackAndroid,
+  Dimensions
 } from 'react-native';
 
 import * as nicknameActions from '../actions/nicknameActions';
-
-const Dimensions = require('Dimensions');
 
 class MakeNickname extends Component {
   componentWillMount() {
