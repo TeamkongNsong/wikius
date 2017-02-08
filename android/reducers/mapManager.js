@@ -14,6 +14,7 @@ const initialState = {
     longitudeDelta: 0.0421,
   },
   flags: [],
+  scribbleInput: null,
 };
 
 const mapManager = (state = initialState, action) => {
@@ -36,6 +37,11 @@ const mapManager = (state = initialState, action) => {
     case types.INIT_USER_REGION:
       return Object.assign({}, state, {
         region: state.userRegion,
+      });
+
+    case types.SET_SCRIBBLE_INPUT:
+      return Object.assign({}, state, {
+        scribbleInput: action.scribbleInput,
       });
 
     default:

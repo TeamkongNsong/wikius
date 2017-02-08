@@ -1,9 +1,7 @@
 import * as types from './actionTypes';
-import MapView from 'react-native-maps';
 
-
-const requestGPS = () => ({
-  type: types.REQUEST_GPS,
+const loading = () => ({
+  type: types.LOADING,
 });
 
 export const refreshGPS = region => ({
@@ -11,17 +9,9 @@ export const refreshGPS = region => ({
   region,
 });
 
-const waitingPostFlag = () => ({
-  type: types.WATING_POST_FLAG,
-});
-
 const setUserRegion = userRegion => ({
   type: types.SET_USER_REGION,
   userRegion,
-});
-
-const waitingFetchFlags = () => ({
-  type: types.WAITING_FETCH_FLAGS,
 });
 
 const refreshFlags = flags => ({
@@ -29,17 +19,18 @@ const refreshFlags = flags => ({
   flags,
 });
 
-const requestInitUserRegion = () => ({
-  type: types.REQUEST_INIT_USER_REGION,
-});
-
 const initUserRegion = () => ({
   type: types.INIT_USER_REGION,
 });
 
+export const setScribbleInput = scribbleInput => ({
+  type: types.SET_SCRIBBLE_INPUT,
+  scribbleInput,
+});
+
 export function getUserRegion(cb) {
   return (dispatch, getState) => {
-    dispatch(requestGPS());
+    dispatch(loading());
     const { region } = getState().mapManager;
 
     return navigator.geolocation.getCurrentPosition((position) => {
@@ -48,10 +39,12 @@ export function getUserRegion(cb) {
         longitude: position.coords.longitude,
       });
       dispatch(setUserRegion(userRegion));
+      dispatch(initUserRegion());
       if (cb !== undefined) cb();
     }, (err) => {
       console.log(err, "Can't use GPS");
       dispatch(setUserRegion(region));
+      dispatch(initUserRegion());
       if (cb !== undefined) cb();
     }, {
       enableHighAccuracy: true,
@@ -62,7 +55,7 @@ export function getUserRegion(cb) {
 
 export function initializeUserRegion() {
   return (dispatch) => {
-    dispatch(requestInitUserRegion());
+    dispatch(loading());
 
     return dispatch(getUserRegion(() => {
       dispatch(initUserRegion());
@@ -72,7 +65,7 @@ export function initializeUserRegion() {
 
 export function fetchFlags() {
   return (dispatch, getState) => {
-    dispatch(waitingFetchFlags());
+    dispatch(loading());
     const { host } = getState().logInManager;
 
     return fetch(`${host}/flags`)
@@ -82,9 +75,9 @@ export function fetchFlags() {
   };
 }
 
-export function scribble(message) {
+export function scribble(title, message) {
   return (dispatch, getState) => {
-    dispatch(waitingPostFlag());
+    dispatch(loading());
     const { nickname } = getState().nicknameManager;
     const { host } = getState().logInManager;
 
@@ -99,6 +92,7 @@ export function scribble(message) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          title,
           nickname,
           region,
           message,

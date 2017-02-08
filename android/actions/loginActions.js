@@ -3,12 +3,8 @@ import { Actions } from 'react-native-router-flux';
 
 import * as types from './actionTypes';
 
-const requestLogIn = () => ({
-  type: types.REQUEST_LOGIN,
-});
-
-const requestLogOut = () => ({
-  type: types.REQUEST_LOGOUT,
+const loading = () => ({
+  type: types.LOADING,
 });
 
 const refreshUser = user => ({
@@ -18,7 +14,7 @@ const refreshUser = user => ({
 
 export function logIn() {
   return (dispatch, getState) => {
-    dispatch(requestLogIn());
+    dispatch(loading());
     const {
       host,
       user,
@@ -57,7 +53,7 @@ export function logIn() {
 
 export function logOut() {
   return (dispatch, getState) => {
-    dispatch(requestLogOut());
+    dispatch(loading());
     const { user } = getState().logInManager;
 
     if (user === null) return;
