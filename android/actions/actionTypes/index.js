@@ -1,13 +1,19 @@
+/* --------- for waiting async --------- */
+export const LOADING = 'LOADING';
+
 /* --------- logInManager --------- */
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const REFRESH_USER = 'REFRESH_USER';
-export const REQUEST_LOGIN = 'REQUEST_LOGIN';
-export const REQUEST_LOGOUT = 'REQUEST_LOGOUT';
 
 /* --------- nicknameManager --------- */
 export const INPUT_NICKNAME = 'INPUT_NICKNAME';
-export const NICKNAME_CONFIRM = 'NICKNAME_CONFIRM';
 export const REQUEST_CHECK_NICKNAME = 'REQUEST_CHECK_NICKNAME';
-export const WATING_DELAY = 'WATING_DELAY';
-export const REQUEST_CONFIRM = 'REQUEST_CONFIRM';
+export const REFRESH_NICKNAME = 'REFRESH_NICKNAME';
+
+/* --------- mapManager --------- */
+export const REFRESH_GPS = 'REFRESH_GPS';
+export const SET_USER_REGION = 'SET_USER_REGION';
+export const REFRESH_FLAGS = 'REFRESH_FLAGS';
+export const INIT_USER_REGION = 'INIT_USER_REGION';
+export const SET_SCRIBBLE_INPUT = 'SET_SCRIBBLE_INPUT';

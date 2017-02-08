@@ -9,23 +9,20 @@ const requestCheckNickname = (nickname, check, checkNick) => ({
   checkNick,
 });
 
-const watingDelay = () => ({
-  type: types.WATING_DELAY,
+const loading = () => ({
+  type: types.LOADING,
 });
 
-const requestConfirm = () => ({
-  type: types.REQUEST_CONFIRM,
-});
-
-const nicknameConfirm = () => ({
-  type: types.NICKNAME_CONFIRM,
+export const refreshNickname = nickname => ({
+  type: types.REFRESH_NICKNAME,
+  nickname,
 });
 
 let delay = setTimeout(() => {}, 0);
 
 export function inputNickname(nickname) {
   return (dispatch, getState) => {
-    dispatch(watingDelay());
+    dispatch(loading());
     const { host } = getState().logInManager;
 
     const nicknameLength = nickname.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g,"$&$1$2").length;
@@ -45,7 +42,6 @@ export function inputNickname(nickname) {
 
       fetch(`${host}/users/matchuser_nickname/${nickname}`)
       .then((res) => {
-        console.log(res);
         const check = JSON.parse(res._bodyText);
         const checkNick =
           check
@@ -60,7 +56,7 @@ export function inputNickname(nickname) {
 
 export function confirm() {
   return (dispatch, getState) => {
-    dispatch(requestConfirm());
+    dispatch(loading());
     const { user, host } = getState().logInManager;
     const { nickname } = getState().nicknameManager;
 

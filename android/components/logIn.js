@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 import * as loginActions from '../actions/loginActions';
+import * as nicknameActions from '../actions/nicknameActions';
 
 class LogIn extends Component {
   componentDidMount() {
@@ -19,7 +20,13 @@ class LogIn extends Component {
     .then(() => {
       GoogleSignin.currentUserAsync().then((user) => {
         if (user !== null) {
-          this.props.onLogIn();
+          fetch(`${this.props.host}/users/${user.id}`)
+          .then((thisUser) => {
+            this.props.refreshNickname(JSON.parse(thisUser._bodyText).nickname);
+          })
+          .then(() => {
+            this.props.onLogIn();
+          });
         }
       }).done();
     });
@@ -49,11 +56,13 @@ class LogIn extends Component {
 
 const mapStateToProps = state => ({
   user: state.logInManager.user,
+  host: state.logInManager.host,
 });
 
 const mapDispatchToProps = dispatch => ({
   onLogIn: () => dispatch(loginActions.logIn()),
   onLogOut: () => dispatch(loginActions.logOut()),
+  refreshNickname: nickname => dispatch(nicknameActions.refreshNickname(nickname)),
 });
 
 LogIn = connect(mapStateToProps, mapDispatchToProps)(LogIn);

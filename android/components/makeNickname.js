@@ -6,11 +6,10 @@ import {
   TextInput,
   Text,
   BackAndroid,
+  Dimensions,
 } from 'react-native';
 
 import * as nicknameActions from '../actions/nicknameActions';
-
-const Dimensions = require('Dimensions');
 
 class MakeNickname extends Component {
   componentWillMount() {
@@ -24,7 +23,6 @@ class MakeNickname extends Component {
     return (
       <View style={{ alignItems: 'center' }}>
         <TextInput
-          ref={(input) => { this.nickInput = input; }}
           style={{ top: this.state.center - 60, width: 200, textAlign: 'center' }}
           placeholder="닉네임을 입력해주세요."
           onChangeText={this.props.inputNickname}
@@ -33,7 +31,6 @@ class MakeNickname extends Component {
           {this.props.checkNick}
         </Text>
         <View
-          ref={(view) => { this.checkButton = view; }}
           style={{
             top: this.state.center - 110,
             left: 130,
