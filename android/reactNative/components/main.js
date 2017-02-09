@@ -5,24 +5,13 @@ import {
   BackAndroid,
   Dimensions,
 } from 'react-native';
-import MapView from 'react-native-maps';
 
 import * as mapActions from '../actions/mapActions';
 
+import Map from './dumbComponents/map';
 import ScribbleInput from './dumbComponents/scribbleInput';
 import ScribbleButton from './dumbComponents/scribbleButton';
 import MenuButton from './dumbComponents/menuButton';
-
-const styles = {
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  map: {
-    flex: 1,
-    zIndex: 0,
-  },
-};
 
 class Main extends Component {
   componentWillMount() {
@@ -37,32 +26,19 @@ class Main extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
+      <View style={{ flex: 1, flexDirection: 'column' }}>
+        <Map
           region={this.props.region}
-          onRegionChange={this.props.refreshGPS}
-          showsUserLocation
-        >
-          {
-            this.props.flags.map((flag, index) =>
-              (
-                <MapView.Marker
-                  key={`Marker. ${index}`}
-                  title={flag.nickname}
-                  description={flag.title}
-                  coordinate={{
-                    latitude: flag.latitude,
-                    longitude: flag.longitude,
-                  }}
-                />
-              )
-            )
-          }
-        </MapView>
+          refreshGPS={this.props.refreshGPS}
+          flags={this.props.flags}
+        />
 
-        <ScribbleButton scribbleInput={this.props.scribbleInput} />
+        <ScribbleButton
+          scribbleInput={this.props.scribbleInput}
+        />
+
         <MenuButton />
+
         <ScribbleInput
           scribble={this.props.scribble}
           setScribbleInput={this.props.setScribbleInput}

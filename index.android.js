@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
+import { AppRegistry } from 'react-native';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { Router, Scene } from 'react-native-router-flux';
-import {
-  AppRegistry,
-} from 'react-native';
 
 import reducers from './android/reactNative/reducers';
 import LogIn from './android/reactNative/components/logIn';
