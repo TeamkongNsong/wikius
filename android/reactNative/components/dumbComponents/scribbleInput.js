@@ -3,7 +3,6 @@ import {
   View,
   Button,
   TextInput,
-  Dimensions,
 } from 'react-native';
 import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 
