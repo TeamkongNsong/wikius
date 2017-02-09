@@ -7,10 +7,10 @@ import {
   AppRegistry,
 } from 'react-native';
 
-import reducers from './android/reducers';
-import LogIn from './android/components/logIn';
-import MakeNickname from './android/components/makeNickname';
-import Main from './android/components/main';
+import reducers from './android/reactNative/reducers';
+import LogIn from './android/reactNative/components/logIn';
+import MakeNickname from './android/reactNative/components/makeNickname';
+import Main from './android/reactNative/components/main';
 
 const RouterWithRedux = connect()(Router);
 const createStoreWithMiddleware =
