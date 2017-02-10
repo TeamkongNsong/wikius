@@ -15,6 +15,15 @@ const initialState = {
   },
   flags: [],
   scribbleInput: null,
+  flagDetailBody: null,
+  flagDetail: {
+    idx: null,
+    nickname: null,
+    title: null,
+    message: null,
+    date: null,
+    isWriterOfFlag: false,
+  },
 };
 
 const mapManager = (state = initialState, action) => {
@@ -42,6 +51,16 @@ const mapManager = (state = initialState, action) => {
     case types.SET_SCRIBBLE_INPUT:
       return Object.assign({}, state, {
         scribbleInput: action.scribbleInput,
+      });
+
+    case types.SET_FLAG_DETAIL_BODY:
+      return Object.assign({}, state, {
+        flagDetailBody: action.flagDetailBody,
+      });
+
+    case types.SET_FLAG_DETAIL:
+      return Object.assign({}, state, {
+        flagDetail: action.flagDetail,
       });
 
     default:

@@ -17,3 +17,8 @@ export const SET_USER_REGION = 'SET_USER_REGION';
 export const REFRESH_FLAGS = 'REFRESH_FLAGS';
 export const INIT_USER_REGION = 'INIT_USER_REGION';
 export const SET_SCRIBBLE_INPUT = 'SET_SCRIBBLE_INPUT';
+export const SET_FLAG_DETAIL = 'SET_FLAG_DETAIL';
+export const SET_FLAG_DETAIL_BODY = 'SET_FLAG_DETAIL_BODY';
+
+/* --------- profileManager --------- */
+export const REFRESH_PROFILE = 'REFRESH_PROFILE';
