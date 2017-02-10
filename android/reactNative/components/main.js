@@ -7,11 +7,13 @@ import {
 } from 'react-native';
 
 import * as mapActions from '../actions/mapActions';
+import * as profilesActions from '../actions/profilesActions';
 
 import Map from './dumbComponents/map';
 import ScribbleInput from './dumbComponents/scribbleInput';
 import ScribbleButton from './dumbComponents/scribbleButton';
 import MenuButton from './dumbComponents/menuButton';
+import FlagDetail from './dumbComponents/flagDetail';
 
 class Main extends Component {
   componentWillMount() {
@@ -27,23 +29,40 @@ class Main extends Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'column' }}>
-        <Map
-          region={this.props.region}
-          refreshGPS={this.props.refreshGPS}
-          flags={this.props.flags}
-        />
+        <View style={{ flex: 1 }}>
+          <Map
+            region={this.props.region}
+            refreshGPS={this.props.refreshGPS}
+            flags={this.props.flags}
+            setFlagDetail={this.props.setFlagDetail}
+            flagDetailBody={this.props.flagDetailBody}
+            host={this.props.host}
+            nickname={this.props.nickname}
+          />
 
-        <ScribbleButton
-          scribbleInput={this.props.scribbleInput}
-        />
+          <ScribbleButton
+            scribbleInput={this.props.scribbleInput}
+          />
 
-        <MenuButton />
+          <MenuButton
+            fetchProfile={this.props.fetchProfile}
+          />
 
-        <ScribbleInput
-          scribble={this.props.scribble}
-          setScribbleInput={this.props.setScribbleInput}
-          windowSize={this.windowSize}
-        />
+          <ScribbleInput
+            scribble={this.props.scribble}
+            setScribbleInput={this.props.setScribbleInput}
+            windowSize={this.windowSize}
+          />
+
+          <FlagDetail
+            windowSize={this.windowSize}
+            flag={this.props.flagDetail}
+            setFlagDetailBody={this.props.setFlagDetailBody}
+            deleteFlag={this.props.deleteFlag}
+          />
+        </View>
+        <View style={{ flex: 0 }}>
+        </View>
       </View>
     );
   }
@@ -58,6 +77,14 @@ const mapStateToProps = state => ({
   // GPS상 위치
   scribbleInput: state.mapManager.scribbleInput,
   // scribble 입력창
+  flagDetail: state.mapManager.flagDetail,
+  // flagDetail
+  flagDetailBody: state.mapManager.flagDetailBody,
+  // flagDetail을 표현해 줄 텍스트박스
+  host: state.logInManager.host,
+  // host 주소
+  nickname: state.nicknameManager.nickname,
+  // nickname
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -73,6 +100,14 @@ const mapDispatchToProps = dispatch => ({
   // 플래그를 박는다
   setScribbleInput: scribbleInput => dispatch(mapActions.setScribbleInput(scribbleInput)),
   // state에 scribbleInput를 저장한다
+  setFlagDetail: flagDetail => dispatch(mapActions.setFlagDetail(flagDetail)),
+  // flagDetail을 갱신한다
+  setFlagDetailBody: flagDetailBody => dispatch(mapActions.setFlagDetailBody(flagDetailBody)),
+  // flagDetailBody를 갱신한다
+  deleteFlag: () => dispatch(mapActions.deleteFlag()),
+  // flagDetail에 해당하는 flag를 삭제한다
+  fetchProfile: callback => dispatch(profilesActions.fetchProfile(callback)),
+  // Profile 화면을 갱신한다
 });
 
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);

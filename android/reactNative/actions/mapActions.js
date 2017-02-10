@@ -28,6 +28,16 @@ export const setScribbleInput = scribbleInput => ({
   scribbleInput,
 });
 
+export const setFlagDetail = flagDetail => ({
+  type: types.SET_FLAG_DETAIL,
+  flagDetail,
+});
+
+export const setFlagDetailBody = flagDetailBody => ({
+  type: types.SET_FLAG_DETAIL_BODY,
+  flagDetailBody,
+});
+
 export function getUserRegion(cb) {
   return (dispatch, getState) => {
     dispatch(loading());
@@ -102,5 +112,20 @@ export function scribble(title, message) {
         dispatch(fetchFlags());
       });
     }));
+  };
+}
+
+export function deleteFlag() {
+  return (dispatch, getState) => {
+    dispatch(loading());
+    const { host } = getState().logInManager;
+    const { idx } = getState().mapManager.flagDetail;
+
+    return fetch(`${host}/flags/${idx}`, {
+      method: 'DELETE',
+    })
+    .then(() => {
+      dispatch(fetchFlags());
+    });
   };
 }

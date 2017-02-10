@@ -9,6 +9,7 @@ import reducers from './android/reactNative/reducers';
 import LogIn from './android/reactNative/components/logIn';
 import MakeNickname from './android/reactNative/components/makeNickname';
 import Main from './android/reactNative/components/main';
+import Profiles from './android/reactNative/components/profiles';
 
 const RouterWithRedux = connect()(Router);
 const createStoreWithMiddleware =
@@ -25,6 +26,7 @@ export default class wikius extends Component {
             <Scene key="logIn" component={LogIn} title="Login" initial />
             <Scene key="makeNickname" component={MakeNickname} title="makeNickname" />
             <Scene key="main" component={Main} title="Main" />
+            <Scene key="profiles" component={Profiles} title="Profiles" />
           </Scene>
         </RouterWithRedux>
       </Provider>

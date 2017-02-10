@@ -13,6 +13,7 @@ class ScribbleButton extends Component {
     return (
       <ActionButton
         buttonColor="rgba(200, 0, 0, 0.5)" btnOutRange="rgba(0, 0, 200, 0.5)"
+        offsetX={15} offsetY={0}
         position="center"
         icon={<Icon name="md-create" style={styles} />}
         onPress={() => { this.props.scribbleInput.openDialog(); }}
