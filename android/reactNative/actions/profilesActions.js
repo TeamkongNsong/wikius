@@ -24,6 +24,6 @@ export function fetchProfile(callback) {
       };
       dispatch(refreshProfile(userInProfile));
       callback();
-    })
+    });
   };
 }

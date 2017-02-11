@@ -19,6 +19,10 @@ export const INIT_USER_REGION = 'INIT_USER_REGION';
 export const SET_SCRIBBLE_INPUT = 'SET_SCRIBBLE_INPUT';
 export const SET_FLAG_DETAIL = 'SET_FLAG_DETAIL';
 export const SET_FLAG_DETAIL_BODY = 'SET_FLAG_DETAIL_BODY';
+export const SET_ZOOM_LEVEL_STATE = 'SET_ZOOM_LEVEL_STATE';
 
 /* --------- profileManager --------- */
 export const REFRESH_PROFILE = 'REFRESH_PROFILE';
+
+/* --------- searchManager --------- */
+export const REFRESH_SEARCH_RESULT = 'REFRESH_SEARCH_RESULT';

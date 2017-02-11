@@ -7,6 +7,7 @@ const initialState = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   },
+  zoomLevel: 11.5,
   userRegion: {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -61,6 +62,11 @@ const mapManager = (state = initialState, action) => {
     case types.SET_FLAG_DETAIL:
       return Object.assign({}, state, {
         flagDetail: action.flagDetail,
+      });
+
+    case types.SET_ZOOM_LEVEL_STATE:
+      return Object.assign({}, state, {
+        zoomLevel: action.zoomLevel,
       });
 
     default:

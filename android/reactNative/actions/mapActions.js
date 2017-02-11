@@ -38,6 +38,11 @@ export const setFlagDetailBody = flagDetailBody => ({
   flagDetailBody,
 });
 
+export const setZoomLevelState = zoomLevel => ({
+  type: types.SET_ZOOM_LEVEL_STATE,
+  zoomLevel,
+});
+
 export function getUserRegion(cb) {
   return (dispatch, getState) => {
     dispatch(loading());
@@ -63,25 +68,40 @@ export function getUserRegion(cb) {
   };
 }
 
-export function initializeUserRegion() {
-  return (dispatch) => {
-    dispatch(loading());
-
-    return dispatch(getUserRegion(() => {
-      dispatch(initUserRegion());
-    }));
-  };
-}
-
-export function fetchFlags() {
+export function fetchFlags(n = 100) {
   return (dispatch, getState) => {
     dispatch(loading());
     const { host } = getState().logInManager;
+    const { region } = getState().mapManager;
+
+    const calcNearest = (myRegion, flags, numberOfFlags) => {
+      if (flags.length < numberOfFlags) {
+        return flags;
+      }
+      const result = [];
+      const subResult = [];
+      flags.forEach((flag, index) => {
+        const distance
+          = Math.sqrt(((myRegion.latitude - flag.latitude) * (myRegion.latitude - flag.latitude))
+          + ((myRegion.longitude - flag.longitude) * (myRegion.longitude - flag.longitude)));
+
+        subResult.push([distance, index]);
+      });
+
+      subResult.sort((a, b) => a[0] - b[0]);
+      for (let i = 0; i < numberOfFlags; i += 1) {
+        result.push(flags[subResult[i][1]]);
+      }
+
+      return result;
+    };
 
     return fetch(`${host}/flags`)
-    .then((flags) => {
-      dispatch(refreshFlags(JSON.parse(flags._bodyText)));
-    });
+      .then((flags) => {
+        const parsedFlags = JSON.parse(flags._bodyText);
+        const nearestFlags = calcNearest(region, parsedFlags, n);
+        dispatch(refreshFlags(nearestFlags));
+      });
   };
 }
 
@@ -111,6 +131,32 @@ export function scribble(title, message) {
       .then(() => {
         dispatch(fetchFlags());
       });
+
+      /*--------------- Test Code ---------------*/
+      // for (let i = 0; i < 30000; i += 1) {
+      //   const region = {
+      //     latitude: (Math.random() * 166) - 83,
+      //     longitude: (Math.random() * 360) - 180,
+      //   };
+      //
+      //   fetch(`${host}/flags`, {
+      //     method: 'POST',
+      //     headers: {
+      //       'Accept': 'application/json',
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //       title,
+      //       nickname,
+      //       region,
+      //       message,
+      //     }),
+      //   })
+      //   .then(() => {
+      //     dispatch(fetchFlags());
+      //   });
+      // }
+      /*--------------- Test Code ---------------*/
     }));
   };
 }

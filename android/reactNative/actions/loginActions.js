@@ -20,8 +20,6 @@ export function logIn() {
       user,
     } = getState().logInManager;
 
-    if (user !== null) return console.log('already logged in!');
-
     return GoogleSignin.hasPlayServices({ autoResolve: true })
       .then(() => {
         GoogleSignin.signIn()
@@ -52,11 +50,8 @@ export function logIn() {
 }
 
 export function logOut() {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(loading());
-    const { user } = getState().logInManager;
-
-    if (user === null) return;
 
     return GoogleSignin.signOut()
     .then(() => {

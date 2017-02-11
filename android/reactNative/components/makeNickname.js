@@ -11,47 +11,57 @@ import {
 
 import * as nicknameActions from '../actions/nicknameActions';
 
+const propTypes = {
+  inputNickname: React.PropTypes.func,
+  checkNick: React.PropTypes.string,
+  check: React.PropTypes.bool,
+  confirm: React.PropTypes.func,
+};
+
+const defaultProps = {
+
+};
+
 class MakeNickname extends Component {
   componentWillMount() {
     BackAndroid.addEventListener('hardwareBackPress', () => true);
-    this.setState({
-      center: Dimensions.get('window').height / 2,
-    });
+    this.windowSize = Dimensions.get('window');
   }
 
-  render() {
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <TextInput
-          style={{ top: this.state.center - 60, width: 200, textAlign: 'center' }}
-          placeholder="닉네임을 입력해주세요."
-          onChangeText={this.props.inputNickname}
-        />
-        <Text style={{ top: 250 }}>
-          {this.props.checkNick}
-        </Text>
-        <View
-          style={{
-            top: this.state.center - 110,
-            left: 130,
-            opacity: this.props.checkButtonOpacity
-          }}
-        >
+  confirmButton(check) {
+    return check
+      ? <Text />
+      : (
+        <View style={{ top: (this.windowSize.height / 2) - 110, left: 130 }}>
           <Button
             title="확인"
             onPress={this.props.confirm}
             color="#841584"
           />
         </View>
+      );
+  }
+
+  render() {
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <TextInput
+          style={{ top: (this.windowSize.height / 2) - 60, width: 200, textAlign: 'center' }}
+          placeholder="닉네임을 입력해주세요."
+          onChangeText={this.props.inputNickname}
+        />
+        <Text style={{ top: 250 }}>
+          {this.props.checkNick}
+        </Text>
+        {this.confirmButton(this.props.check)}
       </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  host: state.nicknameManager.host,
   checkNick: state.nicknameManager.checkNick,
-  checkButtonOpacity: state.nicknameManager.checkButtonOpacity,
+  check: state.nicknameManager.check,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -60,5 +70,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 MakeNickname = connect(mapStateToProps, mapDispatchToProps)(MakeNickname);
+
+MakeNickname.propTypes = propTypes;
+MakeNickname.defaultProps = defaultProps;
 
 export default MakeNickname;

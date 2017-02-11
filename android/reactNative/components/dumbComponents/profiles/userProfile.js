@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
  View,
- Text,
 } from 'react-native';
 
 import UserProfileImg from './userProfileImg';
@@ -11,11 +10,17 @@ import UserProfileStateMessage from './userProfileStateMessage';
 class UserProfile extends Component {
   render() {
     return (
-    <View style={{ height: 100, backgroundColor: 'rgba(0, 100, 150, 1)' }}>
-      <Text>users profile</Text>
+    <View style={{
+      backgroundColor: 'rgba(0, 100, 0, 1)',
+      flexDirection: 'row',
+     }}>
       <UserProfileImg userImage={this.props.userInProfile.image} />
-      <UserProfileNickname userNickname={this.props.userInProfile.nickname} />
-      <UserProfileStateMessage userStateMessage={this.props.userInProfile.stateMessage} />
+      <View>
+        <UserProfileNickname
+        userNickname={this.props.userInProfile.nickname} />
+
+        <UserProfileStateMessage userStateMessage={this.props.userInProfile.stateMessage} />
+      </View>
     </View>
     );
   }
