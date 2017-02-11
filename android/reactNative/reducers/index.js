@@ -4,6 +4,8 @@ import logInManager from './logInManager';
 import nicknameManager from './nicknameManager';
 import mapManager from './mapManager';
 import profilesManager from './profilesManager';
+import searchManager from './searchManager';
+import profileSettingManager from './profileSettingManager';
 
 const reducers = combineReducers({
   logInManager,
@@ -11,6 +13,8 @@ const reducers = combineReducers({
   nicknameManager,
   mapManager,
   profilesManager,
+  searchManager,
+  profileSettingManager,
 });
 
 export default reducers;

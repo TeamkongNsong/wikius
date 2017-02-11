@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import {
   View,
   Button,
@@ -9,23 +10,43 @@ import {
 import * as loginActions from '../actions/loginActions';
 import * as nicknameActions from '../actions/nicknameActions';
 
+const propTypes = {
+  host: React.PropTypes.string,
+  refreshNickname: React.PropTypes.func,
+  onLogIn: React.PropTypes.func,
+  onLogOut: React.PropTypes.func,
+};
+
+const defaultProps = {
+  host: null,
+  refreshNickname: null,
+  onLogIn: null,
+  onLogOut: null,
+};
+
 class LogIn extends Component {
   componentDidMount() {
     this.configure();
   }
 
   configure() {
-    GoogleSignin.configure({
-    })
+    GoogleSignin.configure({})
     .then(() => {
       GoogleSignin.currentUserAsync().then((user) => {
         if (user !== null) {
           fetch(`${this.props.host}/users/${user.id}`)
           .then((thisUser) => {
-            this.props.refreshNickname(JSON.parse(thisUser._bodyText).nickname);
+            if (thisUser._bodyText === '') {
+              return Actions.makeNickname();
+            }
+            const parsedUser = JSON.parse(thisUser._bodyText);
+            this.props.refreshNickname(parsedUser.nickname);
+            return parsedUser;
           })
-          .then(() => {
-            this.props.onLogIn();
+          .then((parsedUser) => {
+            if (parsedUser) {
+              this.props.onLogIn();
+            }
           });
         }
       }).done();
@@ -57,6 +78,7 @@ class LogIn extends Component {
 const mapStateToProps = state => ({
   user: state.logInManager.user,
   host: state.logInManager.host,
+  nickname: state.nicknameManager.nickname,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -66,5 +88,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 LogIn = connect(mapStateToProps, mapDispatchToProps)(LogIn);
+
+LogIn.propTypes = propTypes;
+LogIn.defaultProps = defaultProps;
 
 export default LogIn;

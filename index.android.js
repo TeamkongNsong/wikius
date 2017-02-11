@@ -10,6 +10,9 @@ import LogIn from './android/reactNative/components/logIn';
 import MakeNickname from './android/reactNative/components/makeNickname';
 import Main from './android/reactNative/components/main';
 import Profiles from './android/reactNative/components/profiles';
+import SearchUser from './android/reactNative/components/searchUser';
+import ProfileSetting from './android/reactNative/components/profileSetting';
+import ChangeStateMsg from './android/reactNative/components/changeStateMsg';
 
 const RouterWithRedux = connect()(Router);
 const createStoreWithMiddleware =
@@ -27,6 +30,9 @@ export default class wikius extends Component {
             <Scene key="makeNickname" component={MakeNickname} title="makeNickname" />
             <Scene key="main" component={Main} title="Main" />
             <Scene key="profiles" component={Profiles} title="Profiles" />
+            <Scene key="searchUser" component={SearchUser} title="SearchUser" />
+            <Scene key="profileSetting" component={ProfileSetting} title="ProfileSetting" />
+            <Scene key="changeStateMsg" component={ChangeStateMsg} title="ChangeStateMsg" />
           </Scene>
         </RouterWithRedux>
       </Provider>

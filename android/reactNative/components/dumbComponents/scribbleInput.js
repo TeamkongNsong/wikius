@@ -6,6 +6,12 @@ import {
 } from 'react-native';
 import PopupDialog, { SlideAnimation } from 'react-native-popup-dialog';
 
+const propTypes = {
+  setScribbleInput: React.PropTypes.func.isRequired,
+  windowSize: React.PropTypes.object.isRequired,
+  scribble: React.PropTypes.func.isRequired,
+};
+
 class ScribbleInput extends Component {
   render() {
     return (
@@ -39,8 +45,8 @@ class ScribbleInput extends Component {
             onPress={() => {
               this.scribbleInput.closeDialog();
               this.props.scribble(this.title, this.message);
-              this.titleComponent.setNativeProps({text: ''});
-              this.messageComponent.setNativeProps({text: ''});
+              this.titleComponent.setNativeProps({ text: '' });
+              this.messageComponent.setNativeProps({ text: '' });
             }}
           />
         </View>
@@ -48,5 +54,7 @@ class ScribbleInput extends Component {
     );
   }
 }
+
+ScribbleInput.propTypes = propTypes;
 
 export default ScribbleInput;
