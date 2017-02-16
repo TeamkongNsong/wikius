@@ -2,9 +2,11 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
   userInProfile: {
-    image: null,
+    idx: null,
     nickname: null,
+    image: null,
     stateMessage: null,
+    isMine: false,
   },
 };
 

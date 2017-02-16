@@ -2,7 +2,7 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
   nickname: null,
-  checkNick: '',
+  checkDuplicatedNick: ' ',
   check: true,
   modified: false,
 };
@@ -12,7 +12,7 @@ const nicknameManager = (state = initialState, action) => {
     case types.REQUEST_CHECK_NICKNAME: {
       return Object.assign({}, state, {
         nickname: action.nickname,
-        checkNick: action.checkNick,
+        checkDuplicatedNick: action.checkDuplicatedNick,
         check: action.check,
         modified: action.modified,
       });

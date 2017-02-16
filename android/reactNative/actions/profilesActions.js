@@ -1,29 +1,32 @@
+import { AsyncStorage } from 'react-native';
+
 import * as types from './actionTypes';
+import { host, key } from '../../../configure';
 
 const loading = () => ({
   type: types.LOADING,
 });
 
-const refreshProfile = userInProfile => ({
+export const refreshProfile = userInProfile => ({
   type: types.REFRESH_PROFILE,
   userInProfile,
 });
 
-export function fetchProfile(callback) {
-  return (dispatch, getState) => {
-    const { user, host } = getState().logInManager;
+export function getMyData() {
+  return (dispatch) => {
     dispatch(loading());
 
-    return fetch(`${host}/users/${user.id}`)
-    .then((data) => {
-      const parsedData = JSON.parse(data._bodyText);
-      const userInProfile = {
-        image: parsedData.img || '기본 이미지',
-        nickname: parsedData.nickname,
-        stateMessage: parsedData.state_message || '상태메시지를 입력해주세요',
-      };
-      dispatch(refreshProfile(userInProfile));
-      callback();
-    });
+    return AsyncStorage.getItem(key)
+      .then(data => JSON.parse(data))
+      .then((parsedData) => {
+        return fetch(`${host}/users/me`, {
+          method: 'GET',
+          headers: parsedData.headers,
+        })
+        .then((userData) => {
+          const parsedUserData = JSON.parse(userData._bodyText).user;
+          return parsedUserData;
+        });
+      });
   };
 }

@@ -7,13 +7,6 @@ import {
 } from 'react-native';
 import PopupDialog from 'react-native-popup-dialog';
 
-const propTypes = {
-  deleteFlag: React.PropTypes.func.isRequired,
-  setFlagDetailBody: React.PropTypes.func.isRequired,
-  windowSize: React.PropTypes.object.isRequired,
-  flag: React.PropTypes.object.isRequired,
-};
-
 class FlagDetail extends Component {
   constructor() {
     super();
@@ -64,7 +57,5 @@ class FlagDetail extends Component {
     );
   }
 }
-
-FlagDetail.propTypes = propTypes;
 
 export default FlagDetail;

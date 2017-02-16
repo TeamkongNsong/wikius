@@ -1,29 +1,15 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
+import { host } from '../../../../../configure';
 
 const style = {
   flex: 1,
   zIndex: 0,
 };
 
-const propTypes = {
-  region: React.PropTypes.object.isRequired,
-  refreshGPS: React.PropTypes.func.isRequired,
-  flags: React.PropTypes.array.isRequired,
-  host: React.PropTypes.string.isRequired,
-  setFlagDetail: React.PropTypes.func.isRequired,
-  nickname: React.PropTypes.string,
-  flagDetailBody: React.PropTypes.object,
-};
-
-const defaultProps = {
-  flagDetailBody: null,
-  nickname: null,
-};
-
 class Map extends Component {
   onCalloutPressed(flag) {
-    fetch(`${this.props.host}/flags/${this.props.nickname}?idx=${flag.idx}`)
+    fetch(`${host}/flags/check/${flag.idx}`)
     .then((res) => {
       const isWriterOfFlag = JSON.parse(res._bodyText);
       this.props.setFlagDetail({
@@ -31,7 +17,7 @@ class Map extends Component {
         nickname: flag.nickname,
         title: flag.title,
         message: flag.message,
-        date: flag.date,
+        date: flag.created_at,
         isWriterOfFlag,
       });
       this.props.flagDetailBody.openDialog();
@@ -41,7 +27,7 @@ class Map extends Component {
   markers(flags) {
     return flags.map((flag, index) => (
       <MapView.Marker
-        key={`${flag.date}${index * 10}`}
+        key={`${flag.created_at}${index * 10}`}
         title={flag.nickname}
         description={flag.title}
         coordinate={{
@@ -76,8 +62,5 @@ class Map extends Component {
     );
   }
 }
-
-Map.propTypes = propTypes;
-Map.defaultProps = defaultProps;
 
 export default Map;

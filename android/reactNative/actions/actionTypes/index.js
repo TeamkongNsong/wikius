@@ -2,9 +2,16 @@
 export const LOADING = 'LOADING';
 
 /* --------- logInManager --------- */
+export const CHANGE_ID_ON_TEXT_INPUT = 'CHANGE_ID_ON_TEXT_INPUT';
+export const CHANGE_PASSWORD_ON_TEXT_INPUT = 'CHANGE_PASSWORD_ON_TEXT_INPUT';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export const REFRESH_USER = 'REFRESH_USER';
+
+/* --------- registerManager --------- */
+export const CHECK_PROPER_ID = 'CHECK_PROPER_ID';
+export const INPUT_PASSWORD = 'INPUT_PASSWORD';
+export const INPUT_PASSWORD2 = 'INPUT_PASSWORD2';
+export const REFRESH_CHECK_PROPER_PASSWORD_TEXT = 'REFRESH_CHECK_PROPER_PASSWORD_TEXT';
 
 /* --------- nicknameManager --------- */
 export const INPUT_NICKNAME = 'INPUT_NICKNAME';
@@ -26,3 +33,6 @@ export const REFRESH_PROFILE = 'REFRESH_PROFILE';
 
 /* --------- searchManager --------- */
 export const REFRESH_SEARCH_RESULT = 'REFRESH_SEARCH_RESULT';
+
+/* --------- friendsManager --------- */
+export const REFRESH_FRIENDS = 'REFRESH_FRIENDS';

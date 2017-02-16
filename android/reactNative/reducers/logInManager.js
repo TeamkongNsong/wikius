@@ -1,15 +1,20 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  host: 'http://52.79.191.124:3333',
-  user: null,
+  idOnTextInput: '',
+  passwordOnTextInput: '',
 };
 
 const logInManager = (state = initialState, action) => {
   switch (action.type) {
-    case types.REFRESH_USER:
+    case types.CHANGE_ID_ON_TEXT_INPUT:
       return Object.assign({}, state, {
-        user: action.user,
+        idOnTextInput: action.idOnTextInput,
+      });
+
+    case types.CHANGE_PASSWORD_ON_TEXT_INPUT:
+      return Object.assign({}, state, {
+        passwordOnTextInput: action.passwordOnTextInput,
       });
 
     default:
