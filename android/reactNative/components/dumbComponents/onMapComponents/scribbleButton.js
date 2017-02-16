@@ -8,14 +8,6 @@ const styles = {
   color: 'white',
 };
 
-const propTypes = {
-  scribbleInput: React.PropTypes.object,
-};
-
-const defaultProps = {
-  scribbleInput: null,
-};
-
 class ScribbleButton extends Component {
   render() {
     return (
@@ -29,8 +21,5 @@ class ScribbleButton extends Component {
     );
   }
 }
-
-ScribbleButton.propTypes = propTypes;
-ScribbleButton.defaultProps = defaultProps;
 
 export default ScribbleButton;

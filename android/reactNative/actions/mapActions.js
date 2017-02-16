@@ -1,4 +1,7 @@
+import { AsyncStorage } from 'react-native';
+
 import * as types from './actionTypes';
+import { host, key } from '../../../configure';
 
 const loading = () => ({
   type: types.LOADING,
@@ -71,7 +74,6 @@ export function getUserRegion(cb) {
 export function fetchFlags(n = 100) {
   return (dispatch, getState) => {
     dispatch(loading());
-    const { host } = getState().logInManager;
     const { region } = getState().mapManager;
 
     const calcNearest = (myRegion, flags, numberOfFlags) => {
@@ -96,11 +98,18 @@ export function fetchFlags(n = 100) {
       return result;
     };
 
-    return fetch(`${host}/flags`)
-      .then((flags) => {
-        const parsedFlags = JSON.parse(flags._bodyText);
-        const nearestFlags = calcNearest(region, parsedFlags, n);
-        dispatch(refreshFlags(nearestFlags));
+    return AsyncStorage.getItem(key)
+      .then(data => JSON.parse(data))
+      .then((parsedData) => {
+        fetch(`${host}/flags`, {
+          method: 'GET',
+          headers: parsedData.headers,
+        })
+        .then((flags) => {
+          const parsedFlags = JSON.parse(flags._bodyText).flags;
+          const nearestFlags = calcNearest(region, parsedFlags, n);
+          dispatch(refreshFlags(nearestFlags));
+        });
       });
   };
 }
@@ -108,29 +117,27 @@ export function fetchFlags(n = 100) {
 export function scribble(title, message) {
   return (dispatch, getState) => {
     dispatch(loading());
-    const { nickname } = getState().nicknameManager;
-    const { host } = getState().logInManager;
 
     return dispatch(getUserRegion(() => {
       const { userRegion } = getState().mapManager;
       const region = userRegion;
 
-      fetch(`${host}/flags`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          nickname,
-          region,
-          message,
-        }),
-      })
-      .then(() => {
-        dispatch(fetchFlags());
-      });
+      return AsyncStorage.getItem(key)
+        .then(data => JSON.parse(data))
+        .then((parsedData) => {
+          fetch(`${host}/flags/me`, {
+            method: 'POST',
+            headers: parsedData.headers,
+            body: JSON.stringify({
+              title,
+              region,
+              message,
+            }),
+          })
+          .then(() => {
+            dispatch(fetchFlags());
+          });
+        });
 
       /*--------------- Test Code ---------------*/
       // for (let i = 0; i < 30000; i += 1) {
@@ -164,14 +171,21 @@ export function scribble(title, message) {
 export function deleteFlag() {
   return (dispatch, getState) => {
     dispatch(loading());
-    const { host } = getState().logInManager;
     const { idx } = getState().mapManager.flagDetail;
 
-    return fetch(`${host}/flags/${idx}`, {
-      method: 'DELETE',
-    })
-    .then(() => {
-      dispatch(fetchFlags());
-    });
+    return AsyncStorage.getItem(key)
+      .then(data => JSON.parse(data))
+      .then((parsedData) => {
+        fetch(`${host}/flags/me`, {
+          method: 'DELETE',
+          headers: parsedData.headers,
+          body: JSON.stringify({
+            idx
+          }),
+        })
+        .then(() => {
+          dispatch(fetchFlags());
+        });
+      });
   };
 }

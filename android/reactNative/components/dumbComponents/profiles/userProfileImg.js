@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
  View,
- Text,
  Image,
 } from 'react-native';
 
@@ -12,15 +11,16 @@ class UserProfileImg extends Component {
   render() {
     return (
       <View>
-      <Image
-        style={{
-          width: 80, height: 80,
-          borderRadius: 100,
-          borderWidth: 0.1,
-          borderColor: '#d6d7da',
-        }}
-        source={{ uri: defaultuserImge2 }}
-      />
+        <Image
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 100,
+            borderWidth: 0.1,
+            borderColor: '#d6d7da',
+          }}
+          source={{ uri: defaultuserImge2 }}
+        />
       </View>
     );
   }

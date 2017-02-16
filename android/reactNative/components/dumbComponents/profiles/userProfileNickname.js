@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Actions } from 'react-native-router-flux';
 
 import {
  View,
  Text,
  StyleSheet,
- Button,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -22,16 +20,7 @@ class UserProfileNickname extends Component {
   render() {
     return (
       <View>
-        <Text style={[styles.nickname]}>
-        {this.props.userNickname}
-        </Text>
-        <Button
-          style={[styles.setting]}
-          onPress={() => {
-            Actions.profileSetting();
-          }}
-          title="setting"
-        />
+        <Text style={[styles.nickname]}>{this.props.userNickname}</Text>
       </View>
     );
   }

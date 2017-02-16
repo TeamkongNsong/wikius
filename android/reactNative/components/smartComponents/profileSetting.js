@@ -7,6 +7,9 @@ import {
  StyleSheet,
 } from 'react-native';
 
+import BackButton from '../dumbComponents/onRegisterComponents/backButton';
+import { centerCenterStyle } from '../../../../configure';
+
 const styles = StyleSheet.create({
   nickname: {
     fontSize: 19,
@@ -27,7 +30,7 @@ const styles = StyleSheet.create({
 class ProfileSetting extends Component {
  render() {
    return (
-    <View style={[styles.direction]}>
+    <View style={centerCenterStyle}>
       <View>
         <Button
           style={[styles.nickname]}
@@ -42,6 +45,7 @@ class ProfileSetting extends Component {
           title="change State Message"
         />
       </View>
+      <BackButton />
     </View>
    );
  }

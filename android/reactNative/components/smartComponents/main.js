@@ -1,62 +1,23 @@
+/* eslint react/prop-types: 0 */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   View,
-  BackAndroid,
   Dimensions,
-  Button,
 } from 'react-native';
 
-import * as mapActions from '../actions/mapActions';
-import * as profilesActions from '../actions/profilesActions';
-
-import Map from './dumbComponents/map';
-import ScribbleInput from './dumbComponents/scribbleInput';
-import ScribbleButton from './dumbComponents/scribbleButton';
-import MenuButton from './dumbComponents/menuButton';
-import FlagDetail from './dumbComponents/flagDetail';
-
-const propTypes = {
-  fetchFlags: React.PropTypes.func,
-  initializeUserRegion: React.PropTypes.func,
-  region: React.PropTypes.object,
-  refreshGPS: React.PropTypes.func,
-  flags: React.PropTypes.array,
-  setFlagDetail: React.PropTypes.func,
-  flagDetailBody: React.PropTypes.object,
-  host: React.PropTypes.string,
-  nickname: React.PropTypes.string,
-  scribbleInput: React.PropTypes.object,
-  fetchProfile: React.PropTypes.func,
-  scribble: React.PropTypes.func,
-  setScribbleInput: React.PropTypes.func,
-  flagDetail: React.PropTypes.object,
-  setFlagDetailBody: React.PropTypes.func,
-  deleteFlag: React.PropTypes.func,
-};
-
-const defaultProps = {
-  fetchFlags: null,
-  initializeUserRegion: null,
-  region: null,
-  refreshGPS: null,
-  flags: null,
-  setFlagDetail: null,
-  flagDetailBody: null,
-  host: null,
-  nickname: null,
-  scribbleInput: null,
-  fetchProfile: null,
-  scribble: null,
-  setScribbleInput: null,
-  flagDetail: null,
-  setFlagDetailBody: null,
-  deleteFlag: null,
-};
+import * as mapActions from '../../actions/mapActions';
+import * as profilesActions from '../../actions/profilesActions';
+import * as loginActions from '../../actions/loginActions';
+import Map from '../dumbComponents/onMapComponents/map';
+import ScribbleInput from '../dumbComponents/onMapComponents/scribbleInput';
+import ScribbleButton from '../dumbComponents/onMapComponents/scribbleButton';
+import MenuButton from '../dumbComponents/onMapComponents/menuButton';
+import FlagDetail from '../dumbComponents/onMapComponents/flagDetail';
+import { host } from '../../../../configure';
 
 class Main extends Component {
   componentWillMount() {
-    BackAndroid.addEventListener('hardwareBackPress', () => true);
     this.windowSize = Dimensions.get('window');
   }
 
@@ -75,7 +36,7 @@ class Main extends Component {
             flags={this.props.flags}
             setFlagDetail={this.props.setFlagDetail}
             flagDetailBody={this.props.flagDetailBody}
-            host={this.props.host}
+            host={host}
             nickname={this.props.nickname}
             fetchFlags={this.props.fetchFlags}
             setZoomLevelState={this.props.setZoomLevelState}
@@ -87,9 +48,11 @@ class Main extends Component {
           />
 
           <MenuButton
-            fetchProfile={this.props.fetchProfile}
             fetchFlags={this.props.fetchFlags}
             zoomLevel={this.props.zoomLevel}
+            getMyData={this.props.getMyData}
+            refreshProfile={this.props.refreshProfile}
+            logOut={this.props.logOut}
           />
 
           <ScribbleInput
@@ -104,8 +67,6 @@ class Main extends Component {
             setFlagDetailBody={this.props.setFlagDetailBody}
             deleteFlag={this.props.deleteFlag}
           />
-        </View>
-        <View style={{ flex: 0 }}>
         </View>
       </View>
     );
@@ -125,8 +86,6 @@ const mapStateToProps = state => ({
   // flagDetail
   flagDetailBody: state.mapManager.flagDetailBody,
   // flagDetail을 표현해 줄 텍스트박스
-  host: state.logInManager.host,
-  // host 주소
   nickname: state.nicknameManager.nickname,
   // nickname
   zoomLevel: state.mapManager.zoomLevel,
@@ -150,15 +109,13 @@ const mapDispatchToProps = dispatch => ({
   // flagDetailBody를 갱신한다
   deleteFlag: () => dispatch(mapActions.deleteFlag()),
   // flagDetail에 해당하는 flag를 삭제한다
-  fetchProfile: callback => dispatch(profilesActions.fetchProfile(callback)),
-  // Profile 화면을 갱신한다
   setZoomLevelState: zoomLevel => dispatch(mapActions.setZoomLevelState(zoomLevel)),
   // 현재 지도 확대율을 저장한다
+  getMyData: () => dispatch(profilesActions.getMyData()),
+  refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
+  logOut: () => dispatch(loginActions.logOut()),
 });
 
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);
-
-Main.propTypes = propTypes;
-Main.defaultProps = defaultProps;
 
 export default Main;
