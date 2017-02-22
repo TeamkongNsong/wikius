@@ -59,7 +59,10 @@ export function inputNickname(nickname) {
           }
         })
         .then(() => {
-          fetch(`${host}/users/matchuser_nickname/${nickname}`)
+          fetch(`${host}/users/matchuser_nickname/${nickname}`, {
+            method: 'GET',
+            headers: parsedData.headers,
+          })
           .then((res) => {
             const check = JSON.parse(res._bodyText).check;
             let checkDuplicatedNick = ' ';
@@ -84,7 +87,6 @@ export function confirm() {
   return (dispatch, getState) => {
     dispatch(loading());
     const { nickname, modified } = getState().nicknameManager;
-    console.log(nickname, modified);
 
     return AsyncStorage.getItem(key)
       .then(data => JSON.parse(data))
@@ -96,13 +98,7 @@ export function confirm() {
             nickname,
           }),
         })
-        .then(() => {
-          if (modified) {
-            Actions.pop();
-          } else {
-            Actions.main();
-          }
-        });
+        .then(modified ? Actions.pop() : Actions.main());
       });
   };
 }

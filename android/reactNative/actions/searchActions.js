@@ -15,20 +15,17 @@ const refreshSearchResult = searchResult => ({
 export function fetchSearch(word) {
   return (dispatch) => {
     dispatch(loading());
-    console.log(word);
 
     if (word === '') return dispatch(refreshSearchResult([]));
 
     return AsyncStorage.getItem(key)
       .then(data => JSON.parse(data))
       .then((parsedData) => {
-        console.log(parsedData);
         fetch(`${host}/users/search/${word}`, {
           method: 'GET',
           headers: parsedData.headers,
         })
         .then((searchedUsers) => {
-          console.log(searchedUsers);
           const parsedUsers = JSON.parse(searchedUsers._bodyText).result;
           if (parsedUsers.length > 0) {
             return dispatch(refreshSearchResult(parsedUsers));

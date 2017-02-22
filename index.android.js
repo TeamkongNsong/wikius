@@ -29,7 +29,7 @@ export default class wikius extends Component {
     return (
       <Provider store={store}>
         <RouterWithRedux>
-          <Scene key="root" hideNavBar>
+          <Scene key="root" hideNavBar initial>
             <Scene key="logIn" component={LogIn} title="LogIn" initial />
             <Scene key="logOut" component={LogOut} title="LogOut" />
             <Scene key="makeId" component={MakeId} title="MakeId" />

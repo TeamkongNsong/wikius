@@ -13,7 +13,9 @@ class SearchUser extends Component {
       <View>
         <SearchBar fetchSearch={this.props.fetchSearch} />
         <SearchedUsers
+          fetchSearch={this.props.fetchSearch}
           searchResult={this.props.searchResult}
+          getTimelineOfUser={this.props.getTimelineOfUser}
           refreshProfile={this.props.refreshProfile}
         />
       </View>
@@ -22,12 +24,14 @@ class SearchUser extends Component {
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
   searchResult: state.searchManager.searchResult,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchSearch: word => dispatch(searchActions.fetchSearch(word)),
   refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
+  getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
 });
 
 SearchUser = connect(mapStateToProps, mapDispatchToProps)(SearchUser);

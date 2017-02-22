@@ -2,6 +2,9 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
   friends: [],
+  blocked: [],
+  request: [],
+  receive: [],
 };
 
 const friendsManager = (state = initialState, action) => {
@@ -9,6 +12,9 @@ const friendsManager = (state = initialState, action) => {
     case types.REFRESH_FRIENDS:
       return Object.assign({}, state, {
         friends: action.friends,
+        blocked: action.blocked,
+        request: action.request,
+        receive: action.receive,
       });
 
     default:

@@ -41,12 +41,12 @@ export const setFlagDetailBody = flagDetailBody => ({
   flagDetailBody,
 });
 
-export const setZoomLevelState = zoomLevel => ({
-  type: types.SET_ZOOM_LEVEL_STATE,
-  zoomLevel,
+export const refreshMap = map => ({
+  type: types.REFRESH_MAP,
+  map,
 });
 
-export function getUserRegion(cb) {
+export function getUserRegion(cb, animRegion) {
   return (dispatch, getState) => {
     dispatch(loading());
     const { region } = getState().mapManager;
@@ -55,14 +55,18 @@ export function getUserRegion(cb) {
       const userRegion = Object.assign({}, region, {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
+        latitudeDelta: 0.009927655360755239,
+        longitudeDelta: 0.015449859201908112,
       });
+
       dispatch(setUserRegion(userRegion));
-      dispatch(initUserRegion());
+      animRegion ? dispatch(refreshGPS(animRegion)) : dispatch(initUserRegion());
       if (cb !== undefined) cb();
     }, (err) => {
       console.log(err, "Can't use GPS");
+
       dispatch(setUserRegion(region));
-      dispatch(initUserRegion());
+      animRegion ? dispatch(refreshGPS(animRegion)) : dispatch(initUserRegion());
       if (cb !== undefined) cb();
     }, {
       enableHighAccuracy: true,

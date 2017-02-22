@@ -23,7 +23,7 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.fetchFlags();
-    this.props.getUserRegion();
+    this.props.getUserRegion(undefined, this.props.animRegion);
   }
 
   render() {
@@ -39,8 +39,7 @@ class Main extends Component {
             host={host}
             nickname={this.props.nickname}
             fetchFlags={this.props.fetchFlags}
-            setZoomLevelState={this.props.setZoomLevelState}
-            zoomLevel={this.props.zoomLevel}
+            refreshMap={this.props.refreshMap}
           />
 
           <ScribbleButton
@@ -52,6 +51,7 @@ class Main extends Component {
             zoomLevel={this.props.zoomLevel}
             getMyData={this.props.getMyData}
             refreshProfile={this.props.refreshProfile}
+            getTimelineOfUser={this.props.getTimelineOfUser}
             logOut={this.props.logOut}
           />
 
@@ -74,6 +74,7 @@ class Main extends Component {
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
   region: state.mapManager.region,
   // 지도로 보고 있는 위치
   flags: state.mapManager.flags,
@@ -95,7 +96,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   refreshGPS: region => dispatch(mapActions.refreshGPS(region)),
   // state에 현재 region값을 저장한다
-  getUserRegion: () => dispatch(mapActions.getUserRegion()),
+  getUserRegion: (cb, animRegion) => dispatch(mapActions.getUserRegion(cb, animRegion)),
   // state의 userRegion, region값을 현재 GPS값으로 갱신한다
   fetchFlags: numberOfFlags => dispatch(mapActions.fetchFlags(numberOfFlags)),
   // 현재 보고 있는 화면에서 가까운 numberOfFlags개 만큼의 플래그들을 받아 state의 flags에 저장한다
@@ -109,11 +110,11 @@ const mapDispatchToProps = dispatch => ({
   // flagDetailBody를 갱신한다
   deleteFlag: () => dispatch(mapActions.deleteFlag()),
   // flagDetail에 해당하는 flag를 삭제한다
-  setZoomLevelState: zoomLevel => dispatch(mapActions.setZoomLevelState(zoomLevel)),
-  // 현재 지도 확대율을 저장한다
   getMyData: () => dispatch(profilesActions.getMyData()),
   refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
   logOut: () => dispatch(loginActions.logOut()),
+  refreshMap: map => dispatch(mapActions.refreshMap(map)),
+  getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
 });
 
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);

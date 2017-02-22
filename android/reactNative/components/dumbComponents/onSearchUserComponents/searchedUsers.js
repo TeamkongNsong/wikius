@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-import UserProfile from '../../dumbComponents/profiles/userProfile';
+import { host, key } from '../../../../../configure';
+import UserProfile from '../../dumbComponents/onProfilesComponents/userProfile';
 
 class SearchedUsers extends Component {
+  componentDidMount() {
+    this.props.fetchSearch('');
+  }
+
   userDataToProfile(searchResult) {
     if (searchResult.length === 0) {
       return (
@@ -17,21 +22,49 @@ class SearchedUsers extends Component {
         idx: user.idx,
         image: user.img,
         nickname: user.nickname,
-        stateMessage: user.state_message || '상태메시지를 입력해주세요',
+        stateMessage: user.state_message,
       };
 
       return (
         <TouchableOpacity
           key={`UserProfiles${index * 10}`}
           onPress={() => {
-            this.props.refreshProfile(userInProfile);
-            Actions.profiles();
+            /* 프로필로 이동하는 코드 */
+            AsyncStorage.getItem(key)
+            .then((data) => {
+              const parsedData = JSON.parse(data);
+              fetch(`${host}/users/me`, {
+                method: 'GET',
+                headers: parsedData.headers,
+              })
+              .then((myUserData) => {
+                const parsedMyUser = JSON.parse(myUserData._bodyText).user;
+                const isMine = parsedMyUser.idx === userInProfile.idx;
+
+                fetch(`${host}/friends/me/${userInProfile.nickname}`, {
+                  method: 'GET',
+                  headers: parsedData.headers,
+                })
+                .then((friendsInfo) => {
+                  const parsedFriendsInfo = JSON.parse(friendsInfo._bodyText).friendsInfo[0];
+                  const isFriendStatus = isMine
+                    ? 100
+                    : (parsedFriendsInfo ? parsedFriendsInfo.status : 10);
+                  const friendFromMe = parsedFriendsInfo
+                    ? parsedFriendsInfo.from === parsedMyUser.idx
+                    : false;
+                    
+                  this.props.getTimelineOfUser(userInProfile.idx)
+                  .then(() => {
+                    this.props.refreshProfile(userInProfile);
+                    Actions.profiles({ isMine, isFriendStatus, friendFromMe });
+                  });
+                });
+              });
+            });
           }}
         >
-          <UserProfile
-            userInProfile={userInProfile}
-            isNotMine
-          />
+          <UserProfile userInProfile={userInProfile} isNotMine />
         </TouchableOpacity>
       );
     });

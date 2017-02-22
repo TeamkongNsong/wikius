@@ -42,6 +42,7 @@ class LogIn extends Component {
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
   idOnTextInput: state.logInManager.idOnTextInput,
   passwordOnTextInput: state.logInManager.passwordOnTextInput,
 });

@@ -11,6 +11,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         scene: action.scene,
       };
+
     default:
       return state;
   }
