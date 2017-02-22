@@ -1,5 +1,5 @@
 import OAuthManager from 'react-native-oauth';
-import { Actions, ActionConst } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import { AsyncStorage } from 'react-native';
 
@@ -88,7 +88,7 @@ export function logIn(serviceIssuer, id, password) {
         headers: data.headers,
         body: JSON.stringify({
           user_id,
-          password,
+          password: password || 'null',
         }),
       })
       .then((res) => {
@@ -125,7 +125,6 @@ export function logOut() {
         headers: parsedData.headers,
       })
       .then((res) => {
-        console.log(res);
         const serviceIssuer = parsedData.headers.service_issuer
         if (serviceIssuer !== 'wiki') {
           return manager.deauthorize(serviceIssuer)

@@ -29,13 +29,14 @@ class MakeNickname extends Component {
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
   checkDuplicatedNick: state.nicknameManager.checkDuplicatedNick,
   check: state.nicknameManager.check,
 });
 
 const mapDispatchToProps = dispatch => ({
   inputNickname: nickname => dispatch(nicknameActions.inputNickname(nickname)),
-  confirm: () => dispatch(nicknameActions.confirm()),
+  confirm: refreshProfile => dispatch(nicknameActions.confirm(refreshProfile)),
 });
 
 MakeNickname = connect(mapStateToProps, mapDispatchToProps)(MakeNickname);

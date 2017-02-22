@@ -33,6 +33,7 @@ class MakePassword extends Component {
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
   checkProperPasswordText: state.registerManager.checkProperPasswordText,
   isProperPassword: state.registerManager.isProperPassword,
 });

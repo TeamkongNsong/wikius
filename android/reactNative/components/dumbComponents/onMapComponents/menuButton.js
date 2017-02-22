@@ -17,34 +17,27 @@ class MenuButton extends Component {
         <ActionButton.Item
           buttonColor="rgba(0, 200, 0, 0.5)"
           onPress={() => {
+            /* 프로필로 이동하는 코드 */
             this.props.getMyData()
             .then((data) => {
               const userInProfile = {
                 idx: data.idx,
                 nickname: data.nickname,
                 image: data.img,
-                stateMessage: data.state_message || '상태메시지를 입력해주세요',
+                stateMessage: data.state_message,
               };
-              this.props.refreshProfile(userInProfile);
-              Actions.profiles();
+
+              this.props.getTimelineOfUser(userInProfile.idx)
+              .then(() => {
+                this.props.refreshProfile(userInProfile);
+                Actions.profiles({ isMine: true, isFriendStatus: 100, friendFromMe: false });
+              });
             });
           }}
           offsetX={29}
         >
           <Icon name="md-person" style={styles} />
         </ActionButton.Item>
-
-        {/* flags 새로고침
-        <ActionButton.Item
-          buttonColor="rgba(0, 200, 0, 0.5)"
-          onPress={() => {
-            const numberOfFlags = this.props.zoomLevel > 6 ? 5 : 0;
-            this.props.fetchFlags(numberOfFlags);
-          }}
-          offsetX={29}
-        >
-          <Icon name="md-refresh" style={styles} />
-        </ActionButton.Item>*/}
 
         {/* 유저 검색 */}
         <ActionButton.Item

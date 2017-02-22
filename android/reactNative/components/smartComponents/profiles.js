@@ -1,36 +1,54 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
- View,
- Dimensions,
-} from 'react-native';
+import { View } from 'react-native';
 
-import * as profilesActions from '../../actions/profilesActions';
-import UserProfile from '../dumbComponents/profiles/userProfile';
+import * as mapActions from '../../actions/mapActions';
+import * as friendsActions from '../../actions/friendsActions';
+import UserProfile from '../dumbComponents/onProfilesComponents/userProfile';
+import BackButton from '../dumbComponents/onRegisterComponents/backButton';
+import Timeline from '../dumbComponents/onProfilesComponents/timeline';
 
 class Profiles extends Component {
-  componentWillMount() {
-    this.windowSize = Dimensions.get('window');
-  }
-
   render() {
     return (
-      <View>
-        <UserProfile
-          userInProfile={this.props.userInProfile}
-        />
+      <View style={{ flex: 1, flexDirection: 'column' }}>
+        <View style={{ flex: 1.5 }}>
+          <UserProfile
+            isMine={this.props.isMine}
+            isFriendStatus={this.props.isFriendStatus}
+            friendFromMe={this.props.friendFromMe}
+            userInProfile={this.props.userInProfile}
+            addFriend={this.props.addFriend}
+            cancelAddFriend={this.props.cancelAddFriend}
+          />
+        </View>
+        <View style={{ flex: 8.5, marginBottom: 10 }}>
+          <Timeline
+            refreshGPS={this.props.refreshGPS}
+            region={this.props.region}
+            timeline={this.props.timeline}
+            userIdx={this.props.userInProfile.idx}
+            map={this.props.map}
+          />
+        </View>
+        <BackButton />
       </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
+  timeline: state.profilesManager.timeline,
   userInProfile: state.profilesManager.userInProfile,
+  region: state.mapManager.region,
+  map: state.mapManager.map,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchProfile: () => dispatch(profilesActions.fetchProfile()),
-  getProfile: idx => dispatch(profilesActions.getProfile(idx)),
+  refreshGPS: region => dispatch(mapActions.refreshGPS(region)),
+  addFriend: nickname => dispatch(friendsActions.addFriend(nickname)),
+  cancelAddFriend: nickname => dispatch(friendsActions.cancelAddFriend(nickname)),
 });
 
 Profiles = connect(mapStateToProps, mapDispatchToProps)(Profiles);

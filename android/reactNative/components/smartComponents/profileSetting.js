@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import BackButton from '../dumbComponents/onRegisterComponents/backButton';
+import * as profilesActions from '../../actions/profilesActions';
 import { centerCenterStyle } from '../../../../configure';
 
 const styles = StyleSheet.create({
@@ -45,18 +46,33 @@ class ProfileSetting extends Component {
           title="change State Message"
         />
       </View>
-      <BackButton />
+      <BackButton
+        callback={() => {
+          this.props.getMyData()
+          .then((data) => {
+            const userInProfile = {
+              idx: data.idx,
+              nickname: data.nickname,
+              image: data.img,
+              stateMessage: data.state_message,
+            };
+            this.props.refreshProfile(userInProfile);
+            Actions.profiles();
+          });
+        }}
+      />
     </View>
    );
  }
 }
 
 const mapStateToProps = state => ({
-
+  scene: state.routes.scene,
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  getMyData: () => dispatch(profilesActions.getMyData()),
+  refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
 });
 
 ProfileSetting = connect(mapStateToProps, mapDispatchToProps)(ProfileSetting);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { host } from '../../../../../configure';
+import { AsyncStorage } from 'react-native';
+import { host, key } from '../../../../../configure';
 
 const style = {
   flex: 1,
@@ -9,18 +10,25 @@ const style = {
 
 class Map extends Component {
   onCalloutPressed(flag) {
-    fetch(`${host}/flags/check/${flag.idx}`)
-    .then((res) => {
-      const isWriterOfFlag = JSON.parse(res._bodyText);
-      this.props.setFlagDetail({
-        idx: flag.idx,
-        nickname: flag.nickname,
-        title: flag.title,
-        message: flag.message,
-        date: flag.created_at,
-        isWriterOfFlag,
+    AsyncStorage.getItem(key)
+    .then(data => JSON.parse(data))
+    .then((parsedData) => {
+      fetch(`${host}/flags/check/${flag.idx}`, {
+        method: 'GET',
+        headers: parsedData.headers,
+      })
+      .then((res) => {
+        const isWriterOfFlag = JSON.parse(res._bodyText).check;
+        this.props.setFlagDetail({
+          idx: flag.idx,
+          nickname: flag.nickname,
+          title: flag.title,
+          message: flag.message,
+          date: flag.created_at,
+          isWriterOfFlag,
+        });
+        this.props.flagDetailBody.openDialog();
       });
-      this.props.flagDetailBody.openDialog();
     });
   }
 
@@ -42,17 +50,14 @@ class Map extends Component {
   render() {
     return (
       <MapView
+        ref={this.props.refreshMap}
         style={style}
         showsUserLocation
         region={this.props.region}
         toolbarEnabled={false}
-        onRegionChange={(changedRegion) => {
-          this.props.refreshGPS(changedRegion);
-          const changedZoomLevel = Math.log(360 / changedRegion.longitudeDelta) / Math.LN2;
-          if (!isNaN(changedZoomLevel)) this.props.setZoomLevelState(changedZoomLevel);
-        }}
         onRegionChangeComplete={(changedRegion) => {
-          const numberOfFlags = this.props.zoomLevel > 6 ? 5 : 0;
+          const changedZoomLevel = Math.log(360 / changedRegion.longitudeDelta) / Math.LN2;
+          const numberOfFlags = changedZoomLevel > 6 ? 5 : 0;
           this.props.refreshGPS(changedRegion);
           this.props.fetchFlags(numberOfFlags);
         }}

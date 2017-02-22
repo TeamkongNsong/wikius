@@ -23,6 +23,7 @@ class MakeId extends Component {
 }
 
 const mapStateToProps = state => ({
+  scene: state.routes.scene,
   checkDuplicatedId: state.registerManager.checkDuplicatedId,
   check: state.registerManager.check,
 });

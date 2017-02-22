@@ -31,7 +31,7 @@ class ChangeStateMsg extends Component {
         body: JSON.stringify({
           state_message: message,
         }),
-      })
+      });
     });
   }
 
@@ -66,7 +66,7 @@ class ChangeStateMsg extends Component {
 }
 
 const mapStateToProps = state => ({
-
+  scene: state.routes.scene,
 });
 
 const mapDispatchToProps = dispatch => ({

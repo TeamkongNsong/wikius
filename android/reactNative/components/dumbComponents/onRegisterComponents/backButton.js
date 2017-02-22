@@ -17,7 +17,10 @@ class BackButton extends Component {
         offsetX={15} offsetY={0}
         position="left"
         icon={<Icon name="md-close" style={styles} />}
-        onPress={Actions.pop}
+        onPress={() => {
+          if (this.props.callback) this.props.callback();
+          Actions.pop();
+        }}
         hideShadow
       />
     );
