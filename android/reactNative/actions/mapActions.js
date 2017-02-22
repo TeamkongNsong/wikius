@@ -1,7 +1,5 @@
-import { AsyncStorage } from 'react-native';
-
+import * as loginActions from './loginActions';
 import * as types from './actionTypes';
-import { host, key } from '../../../configure';
 
 const loading = () => ({
   type: types.LOADING,
@@ -102,18 +100,11 @@ export function fetchFlags(n = 100) {
       return result;
     };
 
-    return AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/flags`, {
-          method: 'GET',
-          headers: parsedData.headers,
-        })
-        .then((flags) => {
-          const parsedFlags = JSON.parse(flags._bodyText).flags;
-          const nearestFlags = calcNearest(region, parsedFlags, n);
-          dispatch(refreshFlags(nearestFlags));
-        });
+    return dispatch(loginActions.fetchWithHeaders('flags', 'GET'))
+      .then((flags) => {
+        const parsedFlags = JSON.parse(flags._bodyText).flags;
+        const nearestFlags = calcNearest(region, parsedFlags, n);
+        dispatch(refreshFlags(nearestFlags));
       });
   };
 }
@@ -126,22 +117,14 @@ export function scribble(title, message) {
       const { userRegion } = getState().mapManager;
       const region = userRegion;
 
-      return AsyncStorage.getItem(key)
-        .then(data => JSON.parse(data))
-        .then((parsedData) => {
-          fetch(`${host}/flags/me`, {
-            method: 'POST',
-            headers: parsedData.headers,
-            body: JSON.stringify({
-              title,
-              region,
-              message,
-            }),
-          })
-          .then(() => {
-            dispatch(fetchFlags());
-          });
-        });
+      return dispatch(loginActions.fetchWithHeaders('flags/me', 'POST', {
+        title,
+        region,
+        message,
+      }))
+      .then(() => {
+        dispatch(fetchFlags());
+      });
 
       /*--------------- Test Code ---------------*/
       // for (let i = 0; i < 30000; i += 1) {
@@ -177,19 +160,11 @@ export function deleteFlag() {
     dispatch(loading());
     const { idx } = getState().mapManager.flagDetail;
 
-    return AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/flags/me`, {
-          method: 'DELETE',
-          headers: parsedData.headers,
-          body: JSON.stringify({
-            idx
-          }),
-        })
-        .then(() => {
-          dispatch(fetchFlags());
-        });
-      });
+    return dispatch(loginActions.fetchWithHeaders('flags/me', 'DELETE', {
+      idx,
+    }))
+    .then(() => {
+      dispatch(fetchFlags());
+    });
   };
 }

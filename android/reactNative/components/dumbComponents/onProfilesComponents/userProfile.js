@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import {
- View,
- Button,
- Text,
- AsyncStorage,
-} from 'react-native';
+import { View, Button, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-import { host, key } from '../../../../../configure';
 import UserProfileImg from './userProfileImg';
 import UserProfileNickname from './userProfileNickname';
 import UserProfileStateMessage from './userProfileStateMessage';
@@ -19,39 +13,23 @@ class UserProfile extends Component {
         <Button
           title="수락"
           onPress={() => {
-            AsyncStorage.getItem(key)
-            .then((data) => {
-              const parsedData = JSON.parse(data);
-              fetch(`${host}/friends/me`, {
-                method: 'PUT',
-                headers: parsedData.headers,
-                body: JSON.stringify({
-                  friend: this.props.userInProfile.nickname,
-                  status: 1,
-                }),
-              })
-              .then(() => {
-                Actions.refresh({ isFriendStatus: 1 });
-              });
+            this.props.fetchWithHeaders('friends/me', 'PUT', {
+              friend: this.props.userInProfile.nickname,
+              status: 1,
+            })
+            .then(() => {
+              Actions.refresh({ isFriendStatus: 1 });
             });
           }}
         />
         <Button
           title="거부"
           onPress={() => {
-            AsyncStorage.getItem(key)
-            .then((data) => {
-              const parsedData = JSON.parse(data);
-              fetch(`${host}/friends/me`, {
-                method: 'DELETE',
-                headers: parsedData.headers,
-                body: JSON.stringify({
-                  friend: this.props.userInProfile.nickname,
-                }),
-              })
-              .then(() => {
-                Actions.refresh({ isFriendStatus: 10 });
-              });
+            this.props.fetchWithHeaders('friends/me', 'DELETE', {
+              friend: this.props.userInProfile.nickname,
+            })
+            .then(() => {
+              Actions.refresh({ isFriendStatus: 10 });
             });
           }}
         />

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, AsyncStorage } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-import { host, key } from '../../../../../configure';
 import UserProfile from '../../dumbComponents/onProfilesComponents/userProfile';
 
 class SearchedUsers extends Component {
@@ -30,35 +29,25 @@ class SearchedUsers extends Component {
           key={`UserProfiles${index * 10}`}
           onPress={() => {
             /* 프로필로 이동하는 코드 */
-            AsyncStorage.getItem(key)
-            .then((data) => {
-              const parsedData = JSON.parse(data);
-              fetch(`${host}/users/me`, {
-                method: 'GET',
-                headers: parsedData.headers,
-              })
-              .then((myUserData) => {
-                const parsedMyUser = JSON.parse(myUserData._bodyText).user;
-                const isMine = parsedMyUser.idx === userInProfile.idx;
+            this.props.fetchWithHeaders('users/me', 'GET')
+            .then((myUserData) => {
+              const parsedMyUser = JSON.parse(myUserData._bodyText).user;
+              const isMine = parsedMyUser.idx === userInProfile.idx;
 
-                fetch(`${host}/friends/me/${userInProfile.nickname}`, {
-                  method: 'GET',
-                  headers: parsedData.headers,
-                })
-                .then((friendsInfo) => {
-                  const parsedFriendsInfo = JSON.parse(friendsInfo._bodyText).friendsInfo[0];
-                  const isFriendStatus = isMine
-                    ? 100
-                    : (parsedFriendsInfo ? parsedFriendsInfo.status : 10);
-                  const friendFromMe = parsedFriendsInfo
-                    ? parsedFriendsInfo.from === parsedMyUser.idx
-                    : false;
-                    
-                  this.props.getTimelineOfUser(userInProfile.idx)
-                  .then(() => {
-                    this.props.refreshProfile(userInProfile);
-                    Actions.profiles({ isMine, isFriendStatus, friendFromMe });
-                  });
+              this.props.fetchWithHeaders(`friends/me/${userInProfile.nickname}`, 'GET')
+              .then((friendsInfo) => {
+                const parsedFriendsInfo = JSON.parse(friendsInfo._bodyText).friendsInfo[0];
+                const isFriendStatus = isMine
+                  ? 100
+                  : (parsedFriendsInfo ? parsedFriendsInfo.status : 10);
+                const friendFromMe = parsedFriendsInfo
+                  ? parsedFriendsInfo.from === parsedMyUser.idx
+                  : false;
+
+                this.props.getTimelineOfUser(userInProfile.idx)
+                .then(() => {
+                  this.props.refreshProfile(userInProfile);
+                  Actions.profiles({ isMine, isFriendStatus, friendFromMe });
                 });
               });
             });

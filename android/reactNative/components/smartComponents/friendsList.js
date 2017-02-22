@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 
+import * as loginActions from '../../actions/loginActions';
 import * as friendsActions from '../../actions/friendsActions';
 import * as profilesActions from '../../actions/profilesActions';
 import Friends from '../dumbComponents/onFriendsListComponents/friends';
@@ -11,6 +12,7 @@ class FriendsList extends Component {
     return (
       <View>
         <Friends
+          fetchWithHeaders={this.props.fetchWithHeaders}
           friends={this.props.friends}
           blocked={this.props.blocked}
           request={this.props.request}
@@ -33,6 +35,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchWithHeaders: (url, method, body) =>
+    dispatch(loginActions.fetchWithHeaders(url, method, body)),
   fetchFriends: () => dispatch(friendsActions.fetchFriends()),
   getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
   refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),

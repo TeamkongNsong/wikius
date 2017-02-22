@@ -47,6 +47,22 @@ export function removeSecretData() {
     .catch(err => console.log(`data 삭제 실패!! ${err}`));
 }
 
+export function fetchWithHeaders(url, method, body) {
+  return (dispatch) => {
+    dispatch(loading());
+
+    return AsyncStorage.getItem(key)
+      .then(data => JSON.parse(data))
+      .then((parsedData) => {
+        return fetch(`${host}/${url}`, {
+          method,
+          headers: parsedData.headers,
+          body: body ? JSON.stringify(body) : null,
+        });
+      });
+  };
+}
+
 export function logIn(serviceIssuer, id, password) {
   return (dispatch) => {
     dispatch(loading());
@@ -117,28 +133,21 @@ export function logOut() {
   return (dispatch) => {
     dispatch(loading());
 
-    AsyncStorage.getItem(key)
-    .then(data => JSON.parse(data))
-    .then((parsedData) => {
-      return fetch(`${host}/auth/sign-out`, {
-        method: 'PUT',
-        headers: parsedData.headers,
-      })
-      .then((res) => {
-        const serviceIssuer = parsedData.headers.service_issuer
-        if (serviceIssuer !== 'wiki') {
-          return manager.deauthorize(serviceIssuer)
-            .then(() => console.log(`${serviceIssuer} 로그아웃!`))
-            .catch(err => console.log(`${serviceIssuer} 로그아웃 에러 발생!`, err));
-        }
-      })
-      .then(() => {
-        return removeSecretData()
-          .then(() => {
-            fetch('https://mail.google.com/mail/u/0/?logout&hl=en')
-            .then(() => Actions.logIn({ type: 'reset' }));
-          });
-      });
+    fetchWithHeaders('auth/sign-out', 'PUT')
+    .then((res) => {
+      const serviceIssuer = parsedData.headers.service_issuer
+      if (serviceIssuer !== 'wiki') {
+        return manager.deauthorize(serviceIssuer)
+          .then(() => console.log(`${serviceIssuer} 로그아웃!`))
+          .catch(err => console.log(`${serviceIssuer} 로그아웃 에러 발생!`, err));
+      }
+    })
+    .then(() => {
+      return removeSecretData()
+        .then(() => {
+          fetch('https://mail.google.com/mail/u/0/?logout&hl=en')
+          .then(() => Actions.logIn({ type: 'reset' }));
+        });
     });
   };
 }

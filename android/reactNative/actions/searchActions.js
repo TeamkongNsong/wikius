@@ -1,7 +1,5 @@
-import { AsyncStorage } from 'react-native';
-
+import * as loginActions from './loginActions';
 import * as types from './actionTypes';
-import { host, key } from '../../../configure';
 
 const loading = () => ({
   type: types.LOADING,
@@ -18,20 +16,13 @@ export function fetchSearch(word) {
 
     if (word === '') return dispatch(refreshSearchResult([]));
 
-    return AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/users/search/${word}`, {
-          method: 'GET',
-          headers: parsedData.headers,
-        })
-        .then((searchedUsers) => {
-          const parsedUsers = JSON.parse(searchedUsers._bodyText).result;
-          if (parsedUsers.length > 0) {
-            return dispatch(refreshSearchResult(parsedUsers));
-          }
-          dispatch(refreshSearchResult([]));
-        });
+    return dispatch(loginActions.fetchWithHeaders(`users/search/${word}`, 'GET'))
+      .then((searchedUsers) => {
+        const parsedUsers = JSON.parse(searchedUsers._bodyText).result;
+        if (parsedUsers.length > 0) {
+          return dispatch(refreshSearchResult(parsedUsers));
+        }
+        dispatch(refreshSearchResult([]));
       });
   };
 }

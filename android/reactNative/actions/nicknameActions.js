@@ -1,7 +1,6 @@
 import { Actions } from 'react-native-router-flux';
-import { AsyncStorage } from 'react-native';
-import { key, host } from '../../../configure';
 
+import * as loginActions from './loginActions';
 import * as types from './actionTypes';
 
 const requestCheckNickname = (nickname, check, checkDuplicatedNick, modified) => ({
@@ -44,39 +43,29 @@ export function inputNickname(nickname) {
       let currentNickname = null;
       let modified = false;
 
-      AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/auth/check/nickname`, {
-          method: 'GET',
-          headers: parsedData.headers,
-        })
-        .then((userInfo) => {
-          const parsedUserInfo = JSON.parse(userInfo._bodyText);
-          if (parsedUserInfo.check) {
-            currentNickname = parsedUserInfo.nickname;
-            modified = true;
+      dispatch(loginActions.fetchWithHeaders('auth/check/nickname', 'GET'))
+      .then((userInfo) => {
+        const parsedUserInfo = JSON.parse(userInfo._bodyText);
+        if (parsedUserInfo.check) {
+          currentNickname = parsedUserInfo.nickname;
+          modified = true;
+        }
+      })
+      .then(() => {
+        dispatch(loginActions.fetchWithHeaders(`users/matchuser_nickname/${nickname}`, 'GET'))
+        .then((res) => {
+          const check = JSON.parse(res._bodyText).check;
+          let checkDuplicatedNick = ' ';
+
+          if (!check) {
+            checkDuplicatedNick = `${nickname}는 사용 가능한 닉네임 입니다.`;
+          } else {
+            checkDuplicatedNick = (currentNickname === nickname)
+              ? `${nickname}는 현재 사용 중인 닉네임 입니다.`
+              : `${nickname}는 이미 사용 중인 닉네임 입니다.`;
           }
-        })
-        .then(() => {
-          fetch(`${host}/users/matchuser_nickname/${nickname}`, {
-            method: 'GET',
-            headers: parsedData.headers,
-          })
-          .then((res) => {
-            const check = JSON.parse(res._bodyText).check;
-            let checkDuplicatedNick = ' ';
 
-            if (!check) {
-              checkDuplicatedNick = `${nickname}는 사용 가능한 닉네임 입니다.`;
-            } else {
-              checkDuplicatedNick = (currentNickname === nickname)
-                ? `${nickname}는 현재 사용 중인 닉네임 입니다.`
-                : `${nickname}는 이미 사용 중인 닉네임 입니다.`;
-            }
-
-            dispatch(requestCheckNickname(nickname, check, checkDuplicatedNick, modified));
-          });
+          dispatch(requestCheckNickname(nickname, check, checkDuplicatedNick, modified));
         });
       });
     }, 500);
@@ -88,17 +77,9 @@ export function confirm() {
     dispatch(loading());
     const { nickname, modified } = getState().nicknameManager;
 
-    return AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/auth/nickname`, {
-          method: 'PUT',
-          headers: parsedData.headers,
-          body: JSON.stringify({
-            nickname,
-          }),
-        })
-        .then(modified ? Actions.pop() : Actions.main());
-      });
+    return dispatch(loginActions.fetchWithHeaders('auth/nickname', 'PUT', {
+      nickname,
+    }))
+    .then(modified ? Actions.pop() : Actions.main());
   };
 }

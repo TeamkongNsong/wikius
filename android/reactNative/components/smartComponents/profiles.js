@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 
+import * as loginActions from '../../actions/loginActions';
 import * as mapActions from '../../actions/mapActions';
 import * as friendsActions from '../../actions/friendsActions';
 import UserProfile from '../dumbComponents/onProfilesComponents/userProfile';
@@ -14,6 +15,7 @@ class Profiles extends Component {
       <View style={{ flex: 1, flexDirection: 'column' }}>
         <View style={{ flex: 1.5 }}>
           <UserProfile
+            fetchWithHeaders={this.props.fetchWithHeaders}
             isMine={this.props.isMine}
             isFriendStatus={this.props.isFriendStatus}
             friendFromMe={this.props.friendFromMe}
@@ -46,6 +48,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchWithHeaders: (url, method, body) =>
+    dispatch(loginActions.fetchWithHeaders(url, method, body)),
   refreshGPS: region => dispatch(mapActions.refreshGPS(region)),
   addFriend: nickname => dispatch(friendsActions.addFriend(nickname)),
   cancelAddFriend: nickname => dispatch(friendsActions.cancelAddFriend(nickname)),
