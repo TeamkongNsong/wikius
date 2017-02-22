@@ -38,6 +38,7 @@ class UserProfile extends Component {
   }
 
   addFriendButton(isFriendStatus) {
+    console.log(isFriendStatus);
     switch (isFriendStatus) {
       case 1:
         return (<Text>친구</Text>);

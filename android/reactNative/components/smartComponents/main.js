@@ -49,8 +49,7 @@ class Main extends Component {
             fetchFlags={this.props.fetchFlags}
             zoomLevel={this.props.zoomLevel}
             getMyData={this.props.getMyData}
-            refreshProfile={this.props.refreshProfile}
-            getTimelineOfUser={this.props.getTimelineOfUser}
+            moveToProfiles={this.props.moveToProfiles}
             logOut={this.props.logOut}
           />
 
@@ -109,11 +108,10 @@ const mapDispatchToProps = dispatch => ({
   // flagDetailBody를 갱신한다
   deleteFlag: () => dispatch(mapActions.deleteFlag()),
   // flagDetail에 해당하는 flag를 삭제한다
-  getMyData: () => dispatch(profilesActions.getMyData()),
-  refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
+  getMyData: () => dispatch(loginActions.getMyData()),
+  moveToProfiles: userInProfile => dispatch(profilesActions.moveToProfiles(userInProfile)),
   logOut: () => dispatch(loginActions.logOut()),
   refreshMap: map => dispatch(mapActions.refreshMap(map)),
-  getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
   fetchWithHeaders: (url, method, body) =>
     dispatch(loginActions.fetchWithHeaders(url, method, body)),
 });

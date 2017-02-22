@@ -16,9 +16,8 @@ class SearchUser extends Component {
         <SearchedUsers
           fetchSearch={this.props.fetchSearch}
           searchResult={this.props.searchResult}
-          getTimelineOfUser={this.props.getTimelineOfUser}
-          refreshProfile={this.props.refreshProfile}
           fetchWithHeaders={this.props.fetchWithHeaders}
+          moveToProfiles={this.props.moveToProfiles}
         />
       </View>
     );
@@ -34,8 +33,7 @@ const mapDispatchToProps = dispatch => ({
   fetchWithHeaders: (url, method, body) =>
     dispatch(loginActions.fetchWithHeaders(url, method, body)),
   fetchSearch: word => dispatch(searchActions.fetchSearch(word)),
-  refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
-  getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
+  moveToProfiles: userInProfile => dispatch(profilesActions.moveToProfiles(userInProfile)),
 });
 
 SearchUser = connect(mapStateToProps, mapDispatchToProps)(SearchUser);

@@ -1,3 +1,5 @@
+import { Actions } from 'react-native-router-flux';
+
 import * as loginActions from './loginActions';
 import * as types from './actionTypes';
 
@@ -15,18 +17,6 @@ const refreshTimeline = timeline => ({
   timeline,
 });
 
-export function getMyData() {
-  return (dispatch) => {
-    dispatch(loading());
-
-    return dispatch(loginActions.fetchWithHeaders('users/me', 'GET'))
-      .then((userData) => {
-        const parsedUserData = JSON.parse(userData._bodyText).user;
-        return parsedUserData;
-      });
-  };
-}
-
 export function getTimelineOfUser(userIdx) {
   return (dispatch) => {
     dispatch(loading());
@@ -42,6 +32,35 @@ export function getTimelineOfUser(userIdx) {
         });
         dispatch(refreshTimeline(result));
         return result;
+      });
+  };
+}
+
+export function moveToProfiles(userInProfile) {
+  return (dispatch) => {
+    dispatch(loading());
+
+    return dispatch(loginActions.getMyData())
+      .then((parsedMyUser) => {
+        const isMine = parsedMyUser.idx === userInProfile.idx;
+
+        dispatch(loginActions.fetchWithHeaders(`friends/me/${userInProfile.nickname}`, 'GET'))
+        .then((friendsInfo) => {
+          const parsedFriendsInfo = JSON.parse(friendsInfo._bodyText).friendsInfo[0];
+          const isFriendStatus = parsedFriendsInfo === undefined
+            ? (isMine ? 100 : 10)
+            : (isMine ? 100 : parsedFriendsInfo.status);
+
+          const friendFromMe = parsedFriendsInfo === undefined
+            ? false
+            : parsedFriendsInfo.from === parsedMyUser.idx;
+
+          dispatch(getTimelineOfUser(userInProfile.idx))
+          .then(() => {
+            dispatch(refreshProfile(userInProfile));
+            Actions.profiles({ isMine, isFriendStatus, friendFromMe });
+          });
+        });
       });
   };
 }

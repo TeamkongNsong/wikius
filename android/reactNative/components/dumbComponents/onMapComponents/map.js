@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
-import { AsyncStorage } from 'react-native';
-import { host, key } from '../../../../../configure';
 
 const style = {
   flex: 1,
