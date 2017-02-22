@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 
 import UserProfile from '../../dumbComponents/onProfilesComponents/userProfile';
 
@@ -45,27 +44,7 @@ class Friends extends Component {
         const result = [...this.state.friends];
 
         result.push(
-          <TouchableOpacity
-            key={`FriendProfiles${index * 10}`}
-            onPress={() => {
-              /* 프로필로 이동하는 코드 */
-              this.props.fetchWithHeaders(`friends/me/${userInProfile.nickname}`, 'GET')
-              .then((friendsInfo) => {
-                this.props.fetchWithHeaders('users/me', 'GET')
-                .then((myUserData) => {
-                  const parsedMyUser = JSON.parse(myUserData._bodyText).user;
-                  const parsedFriendsInfo = JSON.parse(friendsInfo._bodyText).friendsInfo[0];
-                  const isFriendStatus = parsedFriendsInfo.status;
-                  const friendFromMe = parsedFriendsInfo.from === parsedMyUser.idx;
-                  this.props.getTimelineOfUser(userInProfile.idx)
-                  .then(() => {
-                    this.props.refreshProfile(userInProfile);
-                    Actions.profiles({ isMine: false, isFriendStatus, friendFromMe });
-                  });
-                });
-              });
-            }}
-          >
+          <TouchableOpacity key={`FriendProfiles${index * 10}`} onPress={() => this.props.moveToProfiles(userInProfile)}>
             <UserProfile userInProfile={userInProfile} isNotMine />
           </TouchableOpacity>
         );

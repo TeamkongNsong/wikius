@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import BackButton from '../dumbComponents/onRegisterComponents/backButton';
+import * as loginActions from '../../actions/loginActions';
 import * as profilesActions from '../../actions/profilesActions';
 import { centerCenterStyle } from '../../../../configure';
 
@@ -56,8 +57,8 @@ class ProfileSetting extends Component {
               image: data.img,
               stateMessage: data.state_message,
             };
-            this.props.refreshProfile(userInProfile);
-            Actions.profiles();
+
+            this.props.moveToProfiles(userInProfile);
           });
         }}
       />
@@ -71,8 +72,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getMyData: () => dispatch(profilesActions.getMyData()),
-  refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
+  getMyData: () => dispatch(loginActions.getMyData()),
+  moveToProfiles: userInProfile => dispatch(profilesActions.moveToProfiles(userInProfile)),
 });
 
 ProfileSetting = connect(mapStateToProps, mapDispatchToProps)(ProfileSetting);

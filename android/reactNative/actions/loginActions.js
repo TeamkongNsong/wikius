@@ -63,6 +63,18 @@ export function fetchWithHeaders(url, method, body) {
   };
 }
 
+export function getMyData() {
+  return (dispatch) => {
+    dispatch(loading());
+
+    return dispatch(fetchWithHeaders('users/me', 'GET'))
+      .then((userData) => {
+        const parsedUserData = JSON.parse(userData._bodyText).user;
+        return parsedUserData;
+      });
+  };
+}
+
 export function logIn(serviceIssuer, id, password) {
   return (dispatch) => {
     dispatch(loading());
@@ -133,8 +145,9 @@ export function logOut() {
   return (dispatch) => {
     dispatch(loading());
 
-    fetchWithHeaders('auth/sign-out', 'PUT')
-    .then((res) => {
+    AsyncStorage.getItem(key)
+    .then(data => JSON.parse(data))
+    .then((parsedData) => {
       const serviceIssuer = parsedData.headers.service_issuer
       if (serviceIssuer !== 'wiki') {
         return manager.deauthorize(serviceIssuer)
@@ -143,11 +156,14 @@ export function logOut() {
       }
     })
     .then(() => {
-      return removeSecretData()
-        .then(() => {
-          fetch('https://mail.google.com/mail/u/0/?logout&hl=en')
-          .then(() => Actions.logIn({ type: 'reset' }));
-        });
+      dispatch(fetchWithHeaders('auth/sign-out', 'PUT'))
+      .then(() => {
+        return removeSecretData()
+          .then(() => {
+            fetch('https://mail.google.com/mail/u/0/?logout&hl=en')
+            .then(() => Actions.logIn({ type: 'reset' }));
+          });
+      });
     });
   };
 }

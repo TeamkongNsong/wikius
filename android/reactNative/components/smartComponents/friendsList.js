@@ -18,8 +18,7 @@ class FriendsList extends Component {
           request={this.props.request}
           receive={this.props.receive}
           fetchFriends={this.props.fetchFriends}
-          getTimelineOfUser={this.props.getTimelineOfUser}
-          refreshProfile={this.props.refreshProfile}
+          moveToProfiles={this.props.moveToProfiles}
         />
       </View>
     );
@@ -38,8 +37,7 @@ const mapDispatchToProps = dispatch => ({
   fetchWithHeaders: (url, method, body) =>
     dispatch(loginActions.fetchWithHeaders(url, method, body)),
   fetchFriends: () => dispatch(friendsActions.fetchFriends()),
-  getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
-  refreshProfile: userInProfile => dispatch(profilesActions.refreshProfile(userInProfile)),
+  moveToProfiles: userInProfile => dispatch(profilesActions.moveToProfiles(userInProfile)),
 });
 
 FriendsList = connect(mapStateToProps, mapDispatchToProps)(FriendsList);

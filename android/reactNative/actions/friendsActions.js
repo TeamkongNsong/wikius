@@ -21,9 +21,8 @@ export function fetchFriends() {
       .then((friendsData) => {
         const parsedFriendsInfo = JSON.parse(friendsData._bodyText).friendsInfo;
 
-        return dispatch(loginActions.fetchWithHeaders('users/me', 'GET'))
-          .then((myUserData) => {
-            const parsedMyUser = JSON.parse(myUserData._bodyText).user;
+        return dispatch(loginActions.getMyData())
+          .then((parsedMyUser) => {
             const friends = [];
             const blocked = [];
             const request = [];

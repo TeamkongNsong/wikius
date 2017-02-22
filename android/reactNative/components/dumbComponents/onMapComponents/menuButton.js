@@ -17,7 +17,6 @@ class MenuButton extends Component {
         <ActionButton.Item
           buttonColor="rgba(0, 200, 0, 0.5)"
           onPress={() => {
-            /* 프로필로 이동하는 코드 */
             this.props.getMyData()
             .then((data) => {
               const userInProfile = {
@@ -27,11 +26,7 @@ class MenuButton extends Component {
                 stateMessage: data.state_message,
               };
 
-              this.props.getTimelineOfUser(userInProfile.idx)
-              .then(() => {
-                this.props.refreshProfile(userInProfile);
-                Actions.profiles({ isMine: true, isFriendStatus: 100, friendFromMe: false });
-              });
+              this.props.moveToProfiles(userInProfile);
             });
           }}
           offsetX={29}
