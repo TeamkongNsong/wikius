@@ -1,7 +1,5 @@
-import { AsyncStorage } from 'react-native';
-
+import * as loginActions from './loginActions';
 import * as types from './actionTypes';
-import { host, key } from '../../../configure';
 
 const loading = () => ({
   type: types.LOADING,
@@ -19,20 +17,11 @@ export function fetchFriends() {
   return (dispatch) => {
     dispatch(loading());
 
-    return AsyncStorage.getItem(key)
-      .then(data => {
-        const parsedData = JSON.parse(data);
-        return fetch(`${host}/friends/me`, {
-          method: 'GET',
-          headers: parsedData.headers,
-        })
-        .then((friendsData) => {
-          const parsedFriendsInfo = JSON.parse(friendsData._bodyText).friendsInfo;
+    return dispatch(loginActions.fetchWithHeaders('friends/me', 'GET'))
+      .then((friendsData) => {
+        const parsedFriendsInfo = JSON.parse(friendsData._bodyText).friendsInfo;
 
-          return fetch(`${host}/users/me`, {
-            method: 'GET',
-            headers: parsedData.headers,
-          })
+        return dispatch(loginActions.fetchWithHeaders('users/me', 'GET'))
           .then((myUserData) => {
             const parsedMyUser = JSON.parse(myUserData._bodyText).user;
             const friends = [];
@@ -55,7 +44,6 @@ export function fetchFriends() {
 
             dispatch(refreshFriends(friends, blocked, request, receive));
           });
-        });
       });
   };
 }
@@ -64,17 +52,9 @@ export function addFriend(nickname) {
   return (dispatch) => {
     dispatch(loading());
 
-    return AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/friends/me`, {
-          method: 'POST',
-          headers: parsedData.headers,
-          body: JSON.stringify({
-            friend: nickname,
-          }),
-        });
-      });
+    return dispatch(loginActions.fetchWithHeaders('friends/me', 'POST', {
+      friend: nickname,
+    }));
   };
 }
 
@@ -82,16 +62,8 @@ export function cancelAddFriend(nickname) {
   return (dispatch) => {
     dispatch(loading());
 
-    return AsyncStorage.getItem(key)
-      .then(data => JSON.parse(data))
-      .then((parsedData) => {
-        fetch(`${host}/friends/me`, {
-          method: 'DELETE',
-          headers: parsedData.headers,
-          body: JSON.stringify({
-            friend: nickname,
-          }),
-        });
-      });
+    return dispatch(loginActions.fetchWithHeaders('friends/me', 'DELETE', {
+      friend: nickname,
+    }));
   };
 }

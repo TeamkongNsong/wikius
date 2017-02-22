@@ -10,13 +10,7 @@ const style = {
 
 class Map extends Component {
   onCalloutPressed(flag) {
-    AsyncStorage.getItem(key)
-    .then(data => JSON.parse(data))
-    .then((parsedData) => {
-      fetch(`${host}/flags/check/${flag.idx}`, {
-        method: 'GET',
-        headers: parsedData.headers,
-      })
+    return this.props.fetchWithHeaders(`flags/check/${flag.idx}`, 'GET')
       .then((res) => {
         const isWriterOfFlag = JSON.parse(res._bodyText).check;
         this.props.setFlagDetail({
@@ -29,7 +23,6 @@ class Map extends Component {
         });
         this.props.flagDetailBody.openDialog();
       });
-    });
   }
 
   markers(flags) {

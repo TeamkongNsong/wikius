@@ -14,7 +14,6 @@ import ScribbleInput from '../dumbComponents/onMapComponents/scribbleInput';
 import ScribbleButton from '../dumbComponents/onMapComponents/scribbleButton';
 import MenuButton from '../dumbComponents/onMapComponents/menuButton';
 import FlagDetail from '../dumbComponents/onMapComponents/flagDetail';
-import { host } from '../../../../configure';
 
 class Main extends Component {
   componentWillMount() {
@@ -31,12 +30,12 @@ class Main extends Component {
       <View style={{ flex: 1, flexDirection: 'column' }}>
         <View style={{ flex: 1 }}>
           <Map
+            fetchWithHeaders={this.props.fetchWithHeaders}
             region={this.props.region}
             refreshGPS={this.props.refreshGPS}
             flags={this.props.flags}
             setFlagDetail={this.props.setFlagDetail}
             flagDetailBody={this.props.flagDetailBody}
-            host={host}
             nickname={this.props.nickname}
             fetchFlags={this.props.fetchFlags}
             refreshMap={this.props.refreshMap}
@@ -115,6 +114,8 @@ const mapDispatchToProps = dispatch => ({
   logOut: () => dispatch(loginActions.logOut()),
   refreshMap: map => dispatch(mapActions.refreshMap(map)),
   getTimelineOfUser: userIdx => dispatch(profilesActions.getTimelineOfUser(userIdx)),
+  fetchWithHeaders: (url, method, body) =>
+    dispatch(loginActions.fetchWithHeaders(url, method, body)),
 });
 
 Main = connect(mapStateToProps, mapDispatchToProps)(Main);
