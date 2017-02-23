@@ -39,8 +39,9 @@ class UserProfileImg extends Component {
   }
 
   moveToImageViewer() {
-    return this.props.fetchWithHeaders('users/me/image', 'GET')
-      .then((images) => {
+    return this.props.fetchWithHeaders(`users/me/image/${this.props.userInProfile.idx}`, 'GET')
+      .then((imagesData) => {
+        const images = JSON.parse(imagesData._bodyText).urls;
         Actions.userProfileImgViewer({ images });
       });
   }
