@@ -7,7 +7,7 @@ import BackButton from '../dumbComponents/onRegisterComponents/backButton';
 class UserProfileImgViewer extends Component {
   render() {
     return (
-      <Modal visible transparent>
+      <Modal visible transparent onRequestClose={console.log}>
         <ImageViewer imageUrls={this.props.images} />
         <BackButton />
       </Modal>
