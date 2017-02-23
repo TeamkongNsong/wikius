@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
 
 import * as registerActions from '../../actions/registerActions';
 import { centerCenterStyle } from '../../../../configure';

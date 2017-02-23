@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
+import { View, TextInput, Text } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  View,
-  TextInput,
-  Text,
-} from 'react-native';
 
 import { centerCenterStyle, textInputStyle } from '../../../../configure';
 import * as nicknameActions from '../../actions/nicknameActions';

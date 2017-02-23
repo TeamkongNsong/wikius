@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { View, Text } from 'react-native';
 
 import { centerCenterStyle } from '../../../../configure';
 import * as registerActions from '../../actions/registerActions';

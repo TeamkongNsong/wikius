@@ -1,10 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React, { Component } from 'react';
+import { View, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  View,
-  Dimensions,
-} from 'react-native';
 
 import * as mapActions from '../../actions/mapActions';
 import * as profilesActions from '../../actions/profilesActions';

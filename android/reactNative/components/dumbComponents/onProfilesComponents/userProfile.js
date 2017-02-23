@@ -17,9 +17,7 @@ class UserProfile extends Component {
               friend: this.props.userInProfile.nickname,
               status: 1,
             })
-            .then(() => {
-              Actions.refresh({ isFriendStatus: 1 });
-            });
+            .then(() => Actions.refresh({ isFriendStatus: 1 }));
           }}
         />
         <Button
@@ -28,9 +26,7 @@ class UserProfile extends Component {
             this.props.fetchWithHeaders('friends/me', 'DELETE', {
               friend: this.props.userInProfile.nickname,
             })
-            .then(() => {
-              Actions.refresh({ isFriendStatus: 10 });
-            });
+            .then(() => Actions.refresh({ isFriendStatus: 10 }));
           }}
         />
       </View>
@@ -38,7 +34,6 @@ class UserProfile extends Component {
   }
 
   addFriendButton(isFriendStatus) {
-    console.log(isFriendStatus);
     switch (isFriendStatus) {
       case 1:
         return (<Text>친구</Text>);
@@ -81,7 +76,11 @@ class UserProfile extends Component {
   render() {
     return (
       <View style={{ backgroundColor: 'rgba(200, 200, 200, 1)', flexDirection: 'row' }}>
-        <UserProfileImg userImage={this.props.userInProfile.image} />
+        <UserProfileImg
+          userInProfile={this.props.userInProfile}
+          isMine={this.props.isMine}
+          fetchWithHeaders={this.props.fetchWithHeaders}
+        />
         <View>
           <UserProfileNickname userNickname={this.props.userInProfile.nickname} />
           <UserProfileStateMessage userStateMessage={this.props.userInProfile.stateMessage} />

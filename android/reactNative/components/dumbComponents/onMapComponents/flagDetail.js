@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  Alert,
-} from 'react-native';
+import { View, Text, Button, Alert } from 'react-native';
 import PopupDialog from 'react-native-popup-dialog';
 
 class FlagDetail extends Component {

@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
+import { View, TextInput, Text } from 'react-native';
 import { connect } from 'react-redux';
-import {
- View,
- TextInput,
- Text,
- AsyncStorage,
-} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-import { centerCenterStyle, host, key } from '../../../../configure';
+import * as loginActions from '../../actions/loginActions';
+import { centerCenterStyle } from '../../../../configure';
 import ConfirmButton from '../dumbComponents/onRegisterComponents/confirmButton';
 import BackButton from '../dumbComponents/onRegisterComponents/backButton';
 
@@ -22,16 +18,8 @@ class ChangeStateMsg extends Component {
   }
 
   updateStateMessage(message) {
-    return AsyncStorage.getItem(key)
-    .then(data => JSON.parse(data))
-    .then((parsedData) => {
-      return fetch(`${host}/users/me/state_message`, {
-        method: 'PUT',
-        headers: parsedData.headers,
-        body: JSON.stringify({
-          state_message: message,
-        }),
-      });
+    return this.props.fetchWithHeaders('users/me/state_message', 'PUT', {
+      state_message: message,
     });
   }
 
@@ -70,7 +58,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  fetchWithHeaders: (url, method, body) =>
+    dispatch(loginActions.fetchWithHeaders(url, method, body)),
 });
 
 ChangeStateMsg = connect(mapStateToProps, mapDispatchToProps)(ChangeStateMsg);

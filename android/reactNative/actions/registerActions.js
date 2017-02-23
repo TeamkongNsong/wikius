@@ -1,6 +1,6 @@
 import { Actions } from 'react-native-router-flux';
-import * as types from './actionTypes';
 
+import * as types from './actionTypes';
 import { host } from '../../../configure';
 
 const loading = () => ({

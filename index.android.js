@@ -17,6 +17,7 @@ import ChangeStateMsg from './android/reactNative/components/smartComponents/cha
 import MakeId from './android/reactNative/components/smartComponents/makeId';
 import MakePassword from './android/reactNative/components/smartComponents/makePassword';
 import FriendsList from './android/reactNative/components/smartComponents/friendsList';
+import UserProfileImgViewer from './android/reactNative/components/smartComponents/userProfileImgViewer';
 
 const RouterWithRedux = connect()(Router);
 const createStoreWithMiddleware =
@@ -37,6 +38,7 @@ export default class wikius extends Component {
             <Scene key="makeNickname" component={MakeNickname} title="makeNickname" />
             <Scene key="main" component={Main} title="Main" />
             <Scene key="profiles" component={Profiles} title="Profiles" />
+            <Scene key="userProfileImgViewer" component={UserProfileImgViewer} title="UserProfileImgViewer" />
             <Scene key="searchUser" component={SearchUser} title="SearchUser" />
             <Scene key="profileSetting" component={ProfileSetting} title="ProfileSetting" />
             <Scene key="changeStateMsg" component={ChangeStateMsg} title="ChangeStateMsg" />
