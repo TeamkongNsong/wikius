@@ -1,7 +1,7 @@
 import { Actions } from 'react-native-router-flux';
 
-import * as loginActions from './loginActions';
 import * as types from './actionTypes';
+import * as loginActions from './loginActions';
 
 const requestCheckNickname = (nickname, check, checkDuplicatedNick, modified) => ({
   type: types.REQUEST_CHECK_NICKNAME,

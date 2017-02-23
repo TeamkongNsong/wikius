@@ -147,6 +147,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.0.1'
 
     compile project(':react-native-device-info')
+    
+    compile project(':react-native-image-picker')
 }
 
 // Run this once to be able to run the application with BUCK

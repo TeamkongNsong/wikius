@@ -1,5 +1,5 @@
-import * as loginActions from './loginActions';
 import * as types from './actionTypes';
+import * as loginActions from './loginActions';
 
 const loading = () => ({
   type: types.LOADING,

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 
 import { centerCenterStyle } from '../../../../configure';
 import * as loginActions from '../../actions/loginActions';

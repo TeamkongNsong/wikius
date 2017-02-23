@@ -1,7 +1,7 @@
-import OAuthManager from 'react-native-oauth';
-import { Actions } from 'react-native-router-flux';
-import DeviceInfo from 'react-native-device-info';
 import { AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import OAuthManager from 'react-native-oauth';
+import DeviceInfo from 'react-native-device-info';
 
 import { OAuthConfig, productName, host, key, serviceIssuerConfig } from '../../../configure';
 import * as types from './actionTypes';

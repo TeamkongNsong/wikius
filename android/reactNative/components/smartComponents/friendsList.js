@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { View } from 'react-native';
+import { connect } from 'react-redux';
 
 import * as loginActions from '../../actions/loginActions';
 import * as friendsActions from '../../actions/friendsActions';
